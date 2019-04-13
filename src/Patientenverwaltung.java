@@ -34,6 +34,8 @@ public class Patientenverwaltung {
 					new Date(1994- 1900, 10, 23),
 					"max.mustermann@gmail.com",
 					"+491534234234");
+			Krankenversicherung k1_p3 = new Krankenversicherung("Allianz", 3434);
+			p3.addKrankenversicherung(k1_p3);
 			
 			Patient p4 = new Patient("P-234213", Anrede.HERR, "Max", "Mustermann", 
 					new Adresse("Schokolade Ecke", "Abgebissen 23", 12412, "Berlin"), 
