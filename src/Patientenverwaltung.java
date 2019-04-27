@@ -1,15 +1,24 @@
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * 
+ * @author laithkaram
+ *@version 1.8
+ */
 
 public class Patientenverwaltung {
-
+	/**
+	* Hauptprogramm.
+	*
+	* @param args Kommandozeilenparameter
+	*/
 	public static void main(String[] args) {
 		try {
 			Krankenhaus kh = new Krankenhaus("Helios Krankenhaus", "DE812524991", new Adresse("Schwanebecker Chaussee 50", "", 13125, "Berlin"));
 
 			Patient p1 = new Patient("P-234213", Anrede.HERR, "Max", "Mustermann", 
-					new Adresse("Schokolade Ecke", "Abgebissen 23", 12412, "Berlin"), 
+					new Adresse("afrikanischestrasse 23", "kottiplatz 23", 12412, "Berlin"), 
 					new Date(1994- 1900, 10, 23),
 					"max.mustermann@gmail.com",
 					"+491534234234");
@@ -21,30 +30,30 @@ public class Patientenverwaltung {
 			p1.addKrankenversicherung(k2_p1);
 			p1.addKrankenversicherung(k3_p1);
 			
-			Patient p2 = new Patient("P-234213", Anrede.HERR, "Max", "Mustermann", 
-					new Adresse("Schokolade Ecke", "Abgebissen 23", 12412, "Berlin"), 
+			Patient p2 = new Patient("P-234244", Anrede.HERR, "Kross", "lucas", 
+					new Adresse("Stromstrasse", "binjastrasse 23", 12412, "Berlin"), 
 					new Date(1994- 1900, 10, 23),
 					"max.mustermann@gmail.com",
 					"+491534234234");
 			Krankenversicherung k1_p2 = new Krankenversicherung("Allianz", 3434);
 			p2.addKrankenversicherung(k1_p2);
 			
-			Patient p3 = new Patient("P-234213", Anrede.HERR, "Max", "Mustermann", 
-					new Adresse("Schokolade Ecke", "Abgebissen 23", 12412, "Berlin"), 
+			Patient p3 = new Patient("P-234213", Anrede.FRAU, "Julia", "kilman", 
+					new Adresse("Schokolade Ecke", "Abgebissen 23", 12412, "Bremen"), 
 					new Date(1994- 1900, 10, 23),
 					"max.mustermann@gmail.com",
 					"+491534234234");
 			Krankenversicherung k1_p3 = new Krankenversicherung("Allianz", 3434);
 			p3.addKrankenversicherung(k1_p3);
 			
-			Patient p4 = new Patient("P-234213", Anrede.HERR, "Max", "Mustermann", 
-					new Adresse("Schokolade Ecke", "Abgebissen 23", 12412, "Berlin"), 
+			Patient p4 = new Patient("P-234213", Anrede.HERR, "jork", "klein", 
+					new Adresse("reickinstrasse", "residenzplatz 23", 12433, "Hamburg"), 
 					new Date(1994- 1900, 10, 23),
 					"max.mustermann@gmail.com",
 					"+491534234234");
 			
-			Patient p5 = new Patient("P-234213", Anrede.FRAU, "Max", "Mustermann", 
-					new Adresse("Schokolade Ecke", "Abgebissen 23", 12412, "Berlin"), 
+			Patient p5 = new Patient("P-234213", Anrede.FRAU, "Heike", "Freter", 
+					new Adresse("lipschitzalle23", "Johanstallerchausse", 12488, "Berlin"), 
 					new Date(1994- 1900, 10, 23),
 					"max.mustermann@gmail.com",
 					"+491534234234");
