@@ -1,8 +1,10 @@
 
 
-public class Krankenversicherung extends Object {
+public abstract class Krankenversicherung {
+	private static int ID_COUNTER = 10000;
+
 	private String name;
-	private int nummer;
+	private String versicherungsNummer;
 
 
 	/**
@@ -10,11 +12,15 @@ public class Krankenversicherung extends Object {
 	 * @param name , nummer	 
 	 */
 	
-	public Krankenversicherung(String name, int nummer) {
+	public Krankenversicherung(String name) {
 		this.name = name;
-		this.nummer = nummer;
+		this.versicherungsNummer = "V-" + ID_COUNTER++;
 	}
 
+
+	abstract double calculateCoverage(double cost, int quarter, int previousQuarter);
+
+	
 	/**
 	 * gibt den name der krankenverischrung zureuck
 	 * @return name
@@ -25,7 +31,6 @@ public class Krankenversicherung extends Object {
 
 	/**
 	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
-	 * @param patient
 	 * @return true, wenn erfolgreich hinzugefuegt, ansonsten false
 	 */
 	public void setName(String name) {
@@ -37,16 +42,16 @@ public class Krankenversicherung extends Object {
 	 * @return nummer
 	 * 
 	 */
-	public int getNummer() {
-		return nummer;
+	public String getVersicherungsNummer() {
+		return versicherungsNummer;
 	}
-	/**
-	 * gibt die krankenversicherungsnummer zureck
-	 * @param nummer
-	 */
 
-	public void setNummer(int nummer) {
-		this.nummer = nummer;
+	/**
+	 *
+	 * @param versicherungsNummer
+	 */
+	public void setVersicherungsNummer(String versicherungsNummer) {
+		this.versicherungsNummer = versicherungsNummer;
 	}
 
 	/**
@@ -61,20 +66,17 @@ public class Krankenversicherung extends Object {
 		}
 		else if (obj instanceof Krankenversicherung){
 			Krankenversicherung k = (Krankenversicherung) obj;
-			if (this.name == k.name && this.nummer == k.nummer) {
+			if (this.name == k.name && this.versicherungsNummer == k.versicherungsNummer) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	/**
-	 * Methode gibt den versicherungsnummer und name zureck und gibt wie es auf der console ausgegeben wird
-	 * @return nummer , name ,der krankernversicherung
-	 */
+
 	@Override
 	public String toString() {
-		return "{ name: "+ this.name + ", nummer: " + this.nummer + "}";
+		return "{ Name: "+ this.name + ", Versicherungsnummer: " + this.versicherungsNummer + "}";
 	}
 	
 	

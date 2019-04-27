@@ -1,4 +1,8 @@
+import javax.swing.text.DateFormatter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 /**
  * 
@@ -6,9 +10,11 @@ import java.util.Date;
  *
  */
 
-public class Patient extends Object {
-	
-	private final String patiennummer;
+public class Patient {
+
+	private static int COUNTER_ID = 20_000;
+
+	private final String patientennummer;
 	private Anrede anrede;
 	private String name;
 	private String nachname;
@@ -22,12 +28,12 @@ public class Patient extends Object {
 
 	/**
 	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
-	 * @param patieninnummer,anrede,name,nachname,adresse,geburtsagdatum
+	 * @param anrede,name,nachname,adresse,geburtsagdatum
 	 */
-	public Patient(String patiennummer, Anrede anrede, String name, String nachname, Adresse adresse, Date geburtsdatum,
+	public Patient(Anrede anrede, String name, String nachname, Adresse adresse, Date geburtsdatum,
 			String telefonnummer, String emailadresse) {
 		super();
-		this.patiennummer = patiennummer;
+		this.patientennummer = "P-" + COUNTER_ID++;
 		this.anrede = anrede;
 		this.name = name;
 		this.nachname = nachname;
@@ -42,8 +48,8 @@ public class Patient extends Object {
 	 * Fuegt die patiente nummer und gibt die zureck
 	 * @return patientnummer
 	 */
-	public String getPatiennummer() {
-		return patiennummer;
+	public String getPatientennummer() {
+		return patientennummer;
 	}
 
 	/**
@@ -77,7 +83,6 @@ public class Patient extends Object {
 
 	/**
 	 * gibt den patienten nachname
-	 * @param patient
 	 * @return Nachname der patient 
 	 */
 	public String getNachname() {
@@ -99,7 +104,6 @@ public class Patient extends Object {
 
 	/**
 	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
-	 * @param patient
 	 * @return true, wenn erfolgreich hinzugefuegt, ansonsten false
 	 */
 	public void setAdresse(Adresse adresse) {
@@ -108,11 +112,20 @@ public class Patient extends Object {
 
 	/**
 	 * Fuegt und pruft wie viele krankenversicherungen der patient hat .
-	 * @param krankernversicherung
 	 * @return true, wenn erfolgreich hinzugefuegt, ansonsten false
 	 */
 	public Krankenversicherung[] getKrankenversicherung() {
 		return krankenversicherung;
+	}
+
+	public int getKrankenversicherungenAnzahl() {
+		int count = 0;
+		for (int i = 0; i < this.krankenversicherung.length; i++) {
+			if (this.krankenversicherung[i] != null) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 	public boolean addKrankenversicherung(Krankenversicherung krankenversicherung) {
@@ -121,11 +134,7 @@ public class Patient extends Object {
 				this.krankenversicherung[i] = krankenversicherung;
 				return true;
 			}
-			/**
-			* false,gibt die folgende INFO raus wenn der patient mehr als 5 krankenversicherungen
-			*/
 		}
-		System.out.println("INFO: Der Patient hat bereits 5 Krankenversicherungen. Bitte entfernen Sie eins bevor Sie ein neues hinzufügen können.");
 		return false;
 	}
 
@@ -220,7 +229,73 @@ public class Patient extends Object {
 		
 		return sb.toString();
 	}
-	
+
+	public static Patient neuAnlegen() {
+		System.out.println(" ======== ANLEGEN EINES NEUEN PATIENTEN ======== ");
+		Scanner sc = new Scanner(System.in);
+		Anrede anrede = liesAnredeEin(sc);
+		if (anrede == Anrede.HERR) {
+			System.out.println("Wie heißt der Patient? ");
+		}
+		else {
+			System.out.println("Wie heißt die Patientin?");
+		}
+		System.out.println("Vorname: ");
+		String name = sc.nextLine();
+		System.out.println("Nachname: ");
+		String nachname = sc.nextLine();
+
+		// ......
+		Adresse adresse = Adresse.neuAnlegen();
+
+		Date gebDatum = liesGebDatumEin(sc);
+		System.out.println("Telefonnummer: ");
+		String telefonnummer = sc.nextLine();
+		System.out.println("Email-Adresse: ");
+		String emailadresse = sc.nextLine();
+		Patient p = new Patient(anrede, name, nachname, adresse, gebDatum, telefonnummer, emailadresse);
+		return p;
+	}
+
+
+
+	private static Anrede liesAnredeEin(Scanner sc) {
+		System.out.println("(0) - Herr oder (1) - Frau?");
+		Anrede anrede;
+		while(true) {
+			String eingabe = sc.nextLine();
+			try {
+				int eingabeInt = Integer.parseInt(eingabe);
+				if (eingabeInt == 0) {
+					anrede = Anrede.HERR;
+					break;
+				}
+				else if (eingabeInt == 1) {
+					anrede = Anrede.FRAU;
+					break;
+				}
+				else {
+					throw new Exception();
+				}
+			} catch (Exception e) {
+				System.out.println("Bitte (0) für einen Mann oder (1) für eine Frau eingeben: ");
+			}
+		}
+		return anrede;
+	}
+
+	private static Date liesGebDatumEin(Scanner sc) {
+		System.out.println("Geburtsdatum (dd.mm.yyyy):");
+		while(true) {
+			String gebDatumString = sc.nextLine();
+			try {
+				Date date = new SimpleDateFormat("dd.MM.yyyy").parse(gebDatumString);
+				return date;
+			} catch (Exception e) {
+				System.out.println("Datum bitte in dem Format dd.MM.yyyy eingeben: ");
+			}
+		}
+	}
 }
 /**
 * enum class 

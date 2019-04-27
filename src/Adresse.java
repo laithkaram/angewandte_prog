@@ -37,7 +37,6 @@ public class Adresse {
 
 	/**
 	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
-	 * @param patient
 	 */
 	public void setAdresse1(String adresse1) {
 		this.adresse1 = adresse1;
@@ -45,7 +44,6 @@ public class Adresse {
 
 	/**
 	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
-	 * @param patient
 	 */
 	public String getAdresse2() {
 		return adresse2;
@@ -102,6 +100,10 @@ public class Adresse {
 				+ ort + "}";
 	}
 
+	public static Adresse neuAnlegen() {
+		// TODO einlesen
+		return new Adresse("Fehlt noch", "Fehlt noch 2", 12345, "Fehlt noch 3");
+	}
 	
 	
 }
