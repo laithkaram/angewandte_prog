@@ -6,9 +6,9 @@ import java.util.Date;
  *
  */
 
-public class Patient extends Object {
+public class Patient {
 	
-	private final String patiennummer;
+	private final String patientennummer;
 	private Anrede anrede;
 	private String name;
 	private String nachname;
@@ -22,12 +22,12 @@ public class Patient extends Object {
 
 	/**
 	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
-	 * @param patieninnummer,anrede,name,nachname,adresse,geburtsagdatum
+	 * @param patientennummer,anrede,name,nachname,adresse,geburtsagdatum
 	 */
-	public Patient(String patiennummer, Anrede anrede, String name, String nachname, Adresse adresse, Date geburtsdatum,
+	public Patient(String patientennummer, Anrede anrede, String name, String nachname, Adresse adresse, Date geburtsdatum,
 			String telefonnummer, String emailadresse) {
 		super();
-		this.patiennummer = patiennummer;
+		this.patientennummer = patientennummer;
 		this.anrede = anrede;
 		this.name = name;
 		this.nachname = nachname;
@@ -42,8 +42,8 @@ public class Patient extends Object {
 	 * Fuegt die patiente nummer und gibt die zureck
 	 * @return patientnummer
 	 */
-	public String getPatiennummer() {
-		return patiennummer;
+	public String getPatientennummer() {
+		return patientennummer;
 	}
 
 	/**
@@ -77,7 +77,6 @@ public class Patient extends Object {
 
 	/**
 	 * gibt den patienten nachname
-	 * @param patient
 	 * @return Nachname der patient 
 	 */
 	public String getNachname() {
@@ -99,7 +98,6 @@ public class Patient extends Object {
 
 	/**
 	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
-	 * @param patient
 	 * @return true, wenn erfolgreich hinzugefuegt, ansonsten false
 	 */
 	public void setAdresse(Adresse adresse) {
@@ -108,7 +106,6 @@ public class Patient extends Object {
 
 	/**
 	 * Fuegt und pruft wie viele krankenversicherungen der patient hat .
-	 * @param krankernversicherung
 	 * @return true, wenn erfolgreich hinzugefuegt, ansonsten false
 	 */
 	public Krankenversicherung[] getKrankenversicherung() {

@@ -1,6 +1,6 @@
 
 
-public class Krankenversicherung extends Object {
+public abstract class Krankenversicherung {
 	private String name;
 	private int nummer;
 
@@ -15,6 +15,10 @@ public class Krankenversicherung extends Object {
 		this.nummer = nummer;
 	}
 
+
+	abstract double calculateCoverage(double cost, int quarter, int previousQuarter);
+
+	
 	/**
 	 * gibt den name der krankenverischrung zureuck
 	 * @return name
@@ -68,10 +72,7 @@ public class Krankenversicherung extends Object {
 		return false;
 	}
 
-	/**
-	 * Methode gibt den versicherungsnummer und name zureck und gibt wie es auf der console ausgegeben wird
-	 * @return nummer , name ,der krankernversicherung
-	 */
+
 	@Override
 	public String toString() {
 		return "{ name: "+ this.name + ", nummer: " + this.nummer + "}";

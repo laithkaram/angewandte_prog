@@ -20,12 +20,12 @@ public class Patientenverwaltung {
 			Patient p1 = new Patient("P-234213", Anrede.HERR, "Max", "Mustermann", 
 					new Adresse("afrikanischestrasse 23", "kottiplatz 23", 12412, "Berlin"), 
 					new Date(1994- 1900, 10, 23),
-					"max.mustermann@gmail.com",
-					"+491534234234");
+					"+491534234234",
+					"max.mustermann@gmail.com");
 			
-			Krankenversicherung k1_p1 = new Krankenversicherung("TK", 2139861234);
-			Krankenversicherung k2_p1 = new Krankenversicherung("Allianz - Unfallversicherung", 124124);
-			Krankenversicherung k3_p1 = new Krankenversicherung("DBK - Arbeitsunfähigkeitsversicherung", 687283423);
+			Krankenversicherung k1_p1 = new Privatversicherung("TK", 2139861234, 300);
+			Krankenversicherung k2_p1 = new GesetzlicheVersicherung("Allianz - Unfallversicherung", 124124, true);
+			Krankenversicherung k3_p1 = new Privatversicherung("DBK - Arbeitsunfähigkeitsversicherung", 687283423, 450);
 			p1.addKrankenversicherung(k1_p1);
 			p1.addKrankenversicherung(k2_p1);
 			p1.addKrankenversicherung(k3_p1);
@@ -35,7 +35,7 @@ public class Patientenverwaltung {
 					new Date(1994- 1900, 10, 23),
 					"max.mustermann@gmail.com",
 					"+491534234234");
-			Krankenversicherung k1_p2 = new Krankenversicherung("Allianz", 3434);
+			Krankenversicherung k1_p2 = new GesetzlicheVersicherung("Allianz", 3434, false);
 			p2.addKrankenversicherung(k1_p2);
 			
 			Patient p3 = new Patient("P-234213", Anrede.FRAU, "Julia", "kilman", 
@@ -43,7 +43,7 @@ public class Patientenverwaltung {
 					new Date(1994- 1900, 10, 23),
 					"max.mustermann@gmail.com",
 					"+491534234234");
-			Krankenversicherung k1_p3 = new Krankenversicherung("Allianz", 3434);
+			Krankenversicherung k1_p3 = new Privatversicherung("Allianz", 3434, 1250);
 			p3.addKrankenversicherung(k1_p3);
 			
 			Patient p4 = new Patient("P-234213", Anrede.HERR, "jork", "klein", 
