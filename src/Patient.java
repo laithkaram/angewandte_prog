@@ -1,6 +1,5 @@
-import javax.swing.text.DateFormatter;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -20,15 +19,22 @@ public class Patient {
 	private String nachname;
 	
 	private Adresse adresse;
-	private Krankenversicherung[] krankenversicherung;
-	
+	private ArrayList<Krankenversicherung> krankenversicherung;
+
 	private Date geburtsdatum;
 	private String telefonnummer;
 	private String emailadresse;
 
+
 	/**
 	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
-	 * @param anrede,name,nachname,adresse,geburtsagdatum
+	 * @param anrede {@link Anrede}
+	 * @param name the given surname
+	 * @param nachname the given name
+	 * @param adresse
+	 * @param geburtsdatum
+	 * @param telefonnummer
+	 * @param emailadresse
 	 */
 	public Patient(Anrede anrede, String name, String nachname, Adresse adresse, Date geburtsdatum,
 			String telefonnummer, String emailadresse) {
@@ -41,7 +47,7 @@ public class Patient {
 		this.geburtsdatum = geburtsdatum;
 		this.telefonnummer = telefonnummer;
 		this.emailadresse = emailadresse;
-		this.krankenversicherung = new Krankenversicherung[5];
+		this.krankenversicherung = new ArrayList<>();
 	}
 
 	/**
@@ -60,7 +66,10 @@ public class Patient {
 		return anrede;
 	}
 
-
+	/**
+	 *
+	 * @param anrede
+	 */
 	public void setAnrede(Anrede anrede) {
 		this.anrede = anrede;
 	}
@@ -89,7 +98,18 @@ public class Patient {
 		return nachname;
 	}
 
+	/**
+	 * fuer das suchen in alphabetischer reihenfolge
+	 * @return
+	 */
+	public String getNachnameInLowerCase() {
+		return nachname.toLowerCase();
+	}
 
+	/**
+	 * Set Nachname
+	 * @param nachname
+	 */
 	public void setNachname(String nachname) {
 		this.nachname = nachname;
 	}
@@ -111,74 +131,61 @@ public class Patient {
 	}
 
 	/**
-	 * Fuegt und pruft wie viele krankenversicherungen der patient hat .
-	 * @return true, wenn erfolgreich hinzugefuegt, ansonsten false
+	 *
+	 * @return
 	 */
-	public Krankenversicherung[] getKrankenversicherung() {
+	public ArrayList<Krankenversicherung> getKrankenversicherung() {
 		return krankenversicherung;
 	}
 
-	public int getKrankenversicherungenAnzahl() {
-		int count = 0;
-		for (int i = 0; i < this.krankenversicherung.length; i++) {
-			if (this.krankenversicherung[i] != null) {
-				count++;
-			}
-		}
-		return count;
-	}
-
-	public boolean addKrankenversicherung(Krankenversicherung krankenversicherung) {
-		for(int i = 0; i < this.krankenversicherung.length; i++) {
-			if (this.krankenversicherung[i] == null) {
-				this.krankenversicherung[i] = krankenversicherung;
-				return true;
-			}
-		}
-		return false;
-	}
-
 	/**
-	 * Die moethode boolean erzeugt ob der patient eine krankenbversicherung hat oder nicht 
-	 * @param krankenversicherung
-	 * @return true, Der patient hat die ubergebene krankenversicherung
+	 *
+	 * @return
 	 */
-	public boolean removeKrankenversicherung(Krankenversicherung krankenversicherung) {
-		for(int i = 0; i < this.krankenversicherung.length; i++) {
-			if (this.krankenversicherung[i] == krankenversicherung) {
-				this.krankenversicherung[i] = null;
-				return true;
-			}
-		}
-		
-		System.out.println("INFO: Der Patient hat die übergebene Krankenversicherungen nicht.");
-		return false;
-	}
-	
-	
 	public Date getGeburtsdatum() {
 		return geburtsdatum;
 	}
 
+	/**
+	 *
+	 * @param geburtsdatum
+	 */
 	public void setGeburtsdatum(Date geburtsdatum) {
 		this.geburtsdatum = geburtsdatum;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public String getTelefonnummer() {
 		return telefonnummer;
 	}
 
+	/**
+	 *
+	 * @param telefonnummer
+	 */
 	public void setTelefonnummer(String telefonnummer) {
 		this.telefonnummer = telefonnummer;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public String getEmailadresse() {
 		return emailadresse;
 	}
 
+	/**
+	 *
+	 * @param emailadresse
+	 */
 	public void setEmailadresse(String emailadresse) {
 		this.emailadresse = emailadresse;
 	}
+
 	/**
 	* eine ubernehmende Override methode
 	* falls zwei personen den gleiche vor und nachname haben und den gleichen geburtsagdatum 
@@ -216,10 +223,8 @@ public class Patient {
 		sb.append("\tadresse: "+ this.adresse + ",\n");
 		sb.append("\tkrankenversicherung:");
 		sb.append("[\n");
-		for(int i = 0; i < this.krankenversicherung.length; i++) {
-			if (this.krankenversicherung[i] != null) {
-				sb.append("\t\t" + this.krankenversicherung[i] + ",\n");
-			}
+		for(int i = 0; i < this.krankenversicherung.size(); i++) {
+			sb.append("\t\t" + this.krankenversicherung.get(i) + ",\n");
 		}
 		sb.append("\t],\n");	
 		sb.append("\tgeburtsdatum: " + this.geburtsdatum.toLocaleString() + ",\n");
@@ -230,6 +235,10 @@ public class Patient {
 		return sb.toString();
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public static Patient neuAnlegen() {
 		System.out.println(" ======== ANLEGEN EINES NEUEN PATIENTEN ======== ");
 		Scanner sc = new Scanner(System.in);
@@ -245,7 +254,6 @@ public class Patient {
 		System.out.println("Nachname: ");
 		String nachname = sc.nextLine();
 
-		// ......
 		Adresse adresse = Adresse.neuAnlegen();
 
 		Date gebDatum = liesGebDatumEin(sc);
@@ -258,7 +266,11 @@ public class Patient {
 	}
 
 
-
+	/**
+	 *
+	 * @param sc
+	 * @return
+	 */
 	private static Anrede liesAnredeEin(Scanner sc) {
 		System.out.println("(0) - Herr oder (1) - Frau?");
 		Anrede anrede;
@@ -284,6 +296,11 @@ public class Patient {
 		return anrede;
 	}
 
+	/**
+	 *
+	 * @param sc
+	 * @return
+	 */
 	private static Date liesGebDatumEin(Scanner sc) {
 		System.out.println("Geburtsdatum (dd.mm.yyyy):");
 		while(true) {
@@ -297,6 +314,7 @@ public class Patient {
 		}
 	}
 }
+
 /**
 * enum class 
 * unterscheidet zwischen dem gender von patienten

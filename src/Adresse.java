@@ -1,109 +1,138 @@
+import java.util.Scanner;
+
 /**
- * 
  * @author laithkaram
- *
  */
 public class Adresse {
 
-	private String adresse1;
-	private String adresse2;
-	private int postleizahl;
-	private String ort;
-	/**
-	* erzeugt die adresse der patienten oder von dem krankenhaus
-	*
-	* @param adresse1 , adresse2, postleizahl, ort 
-	*/
-	public Adresse(String adresse1, String adresse2, int postleizahl, String ort) {
-		this.adresse1 = adresse1;
-		this.adresse2 = adresse2;
-		this.postleizahl = postleizahl;
-		this.ort = ort;
-	}
+    private String adresse1;
+    private String adresse2;
+    private int postleizahl;
+    private String ort;
 
-	
-	/*
-	 * Getter und Setter
-	 */
-	
+    /**
+     * erzeugt die adresse der patienten oder von dem krankenhaus
+     *
+     * @param adresse1 , adresse2, postleizahl, ort
+     */
+    public Adresse(String adresse1, String adresse2, int postleizahl, String ort) {
+        this.adresse1 = adresse1;
+        this.adresse2 = adresse2;
+        this.postleizahl = postleizahl;
+        this.ort = ort;
+    }
 
-	/**
-	 * Fuegt die erste adresse von den patienten	
-	 * @return adresse1
-	 */
-	public String getAdresse1() {
-		return adresse1;
-	}
 
-	/**
-	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
-	 */
-	public void setAdresse1(String adresse1) {
-		this.adresse1 = adresse1;
-	}
+    /*
+     * Getter und Setter
+     */
 
-	/**
-	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
-	 */
-	public String getAdresse2() {
-		return adresse2;
-	}
 
-	/**
-	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
-	 * @param adresse2
-	 */
-	public void setAdresse2(String adresse2) {
-		this.adresse2 = adresse2;
-	}
+    /**
+     * Fuegt die erste adresse von den patienten
+     *
+     * @return adresse1
+     */
+    public String getAdresse1() {
+        return adresse1;
+    }
 
-	/**
-	 * erzeugt den postleizahl von dem patient und gibt den zureck
-	 * @return postleizahl
-	 */
-	public int getPostleizahl() {
-		return postleizahl;
-	}
+    /**
+     * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
+     */
+    public void setAdresse1(String adresse1) {
+        this.adresse1 = adresse1;
+    }
 
-	/**
-	 * Fuegt den postleizahl einem patienten 
-	 * @param postleizahl
-	 */
-	public void setPostleizahl(int postleizahl) {
-		this.postleizahl = postleizahl;
-	}
+    /**
+     * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
+     */
+    public String getAdresse2() {
+        return adresse2;
+    }
 
-	/**
-	 * gibt den ort zureck
-	 * @return ort	 
-	 * */
-	public String getOrt() {
-		return ort;
-	}
+    /**
+     * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
+     *
+     * @param adresse2
+     */
+    public void setAdresse2(String adresse2) {
+        this.adresse2 = adresse2;
+    }
 
-	/**
-	 * Ort vom krankenhaus oder von patienten
-	 * @param ort
-	 */
-	public void setOrt(String ort) {
-		this.ort = ort;
-	}
+    /**
+     * erzeugt den postleizahl von dem patient und gibt den zureck
+     *
+     * @return postleizahl
+     */
+    public int getPostleizahl() {
+        return postleizahl;
+    }
 
-	/**
-	* eine ubernehmende Overrive methode gibt die adresse daten von den patienten an
-	*
-	* @return , adresse1,adresse2,ort,postleizahl
-	*/
-	@Override
-	public String toString() {
-		return "{ adresse1: " + adresse1 + ", adresse2: " + adresse2 + ", postleizahl: " + postleizahl + ", ort: "
-				+ ort + "}";
-	}
+    /**
+     * Fuegt den postleizahl einem patienten
+     *
+     * @param postleizahl
+     */
+    public void setPostleizahl(int postleizahl) {
+        this.postleizahl = postleizahl;
+    }
 
-	public static Adresse neuAnlegen() {
-		// TODO einlesen
-		return new Adresse("Fehlt noch", "Fehlt noch 2", 12345, "Fehlt noch 3");
-	}
-	
-	
+    /**
+     * gibt den ort zureck
+     *
+     * @return ort
+     */
+    public String getOrt() {
+        return ort;
+    }
+
+    /**
+     * Ort vom krankenhaus oder von patienten
+     *
+     * @param ort
+     */
+    public void setOrt(String ort) {
+        this.ort = ort;
+    }
+
+    /**
+     * eine ubernehmende Overrive methode gibt die adresse daten von den patienten an
+     *
+     * @return , adresse1,adresse2,ort,postleizahl
+     */
+    @Override
+    public String toString() {
+        return "{ adresse1: " + adresse1 + ", adresse2: " + adresse2 + ", postleizahl: " + postleizahl + ", ort: "
+                + ort + "}";
+    }
+
+    public static Adresse neuAnlegen() {
+        System.out.println(" ====== ANLEGEN EINER NEUEN ADRESSE ====== ");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Adresse 1: ");
+        String adresse1 = sc.nextLine();
+        System.out.println("Adresse 2: ");
+        String adresse2 = sc.nextLine();
+        System.out.println("PLZ: ");
+        int plz = -1;
+        while (true) {
+            try {
+                String plzString = sc.nextLine();
+                plz = Integer.parseInt(plzString);
+                if (plz < 0) {
+                    throw new Exception();
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Die Eingabe konnte nicht als eine PLZ erkannt werden. Bitte erneut eingeben: ");
+            }
+        }
+        System.out.println("Ort: ");
+        String ort = sc.nextLine();
+
+        return new Adresse(adresse1, adresse2, plz, ort);
+    }
+
+
 }

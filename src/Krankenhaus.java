@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Krankenhaus {
 
@@ -8,6 +9,7 @@ public class Krankenhaus {
     private String ust_idnr;
     private Adresse adresse;
     private ArrayList<Patient> patienten;
+    private HashMap<String, Krankenversicherung> krankenversicherungHashMap;
 
     /**
      * @return tabNamen(String[ ]) die Tabellennamen der entsprechenden
@@ -26,6 +28,7 @@ public class Krankenhaus {
 
         this.adresse = adresse;
         this.patienten = new ArrayList<>();
+        this.krankenversicherungHashMap = new HashMap<>();
     }
 
     /**
@@ -37,6 +40,14 @@ public class Krankenhaus {
     }
 
     /**
+     *
+     * @return
+     */
+    public HashMap<String, Krankenversicherung> getKrankenversicherungHashMap() {
+        return krankenversicherungHashMap;
+    }
+
+    /**
      * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
      *
      * @param patient
@@ -45,6 +56,9 @@ public class Krankenhaus {
     public boolean addPatient(Patient patient) {
         if (this.patienten.size() < MAX_PATIENTEN) {
             this.patienten.add(patient);
+            for(Krankenversicherung k: patient.getKrankenversicherung()) {
+                this.getKrankenversicherungHashMap().put(k.getKrankenversichertennummer(), k);
+            }
             return true;
         }
         else {
