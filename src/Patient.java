@@ -65,7 +65,7 @@ public class Patient {
 	public Anrede getAnrede() {
 		return anrede;
 	}
-	
+
 	/**
 	 *
 	 * @param anrede

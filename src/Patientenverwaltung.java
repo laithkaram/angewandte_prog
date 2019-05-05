@@ -1,10 +1,6 @@
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author laithkaram
@@ -90,31 +86,22 @@ public class Patientenverwaltung {
 
         while (auswahl != 0) {
             showMenu();
-            auswahl = liesEingabe(sc, 0, 6);
+            auswahl = liesEingabe(sc, 0, 9);
 
             switch (auswahl) {
-                case 1: {
-                    // Privatversicherung anlegen und Patientennummer zuordnen
-                    Privatversicherung privatversicherung = Privatversicherung.neuAnlegen();
+                case 1:
+                case 2: {
+                    Krankenversicherung kv;
+                    if (auswahl == 1) {
+                        kv = Privatversicherung.neuAnlegen();
+                    } else {
+                        kv = GesetzlicheVersicherung.neuAnlegen();
+                    }
                     System.out.println("Welchem Patienten soll diese Versicherung zugeordnet werden?");
                     Patient p = pv.searchPatient(sc, false);
                     if (p != null) {
-                        boolean erfolgreich = p.getKrankenversicherung().add(privatversicherung);
-                        if (erfolgreich) {
-                            System.out.println("Versicherung dem Patienten erfolgreich zugepordnet.");
-                        } else {
-                            System.out.println("Der Vorgang war nicht erfolgreich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.");
-                        }
-                    }
-                    break;
-                }
-                case 2: {
-                    // Gesetzliche Versicherung anlegen und Patientennummer zuordnen
-                    GesetzlicheVersicherung gesetzlicheVersicherung = GesetzlicheVersicherung.neuAnlegen();
-                    System.out.println("Welchem Patienten soll diese Versicherung zugeordnet werden? ");
-                    Patient p = pv.searchPatient(sc, false);
-                    if (p != null) {
-                        boolean erfolgreich = p.getKrankenversicherung().add(gesetzlicheVersicherung);
+                        boolean erfolgreich = p.getKrankenversicherung().add(kv);
+                        pv.kh.getKrankenversicherungHashMap().put(kv.getKrankenversichertennummer(), kv);
                         if (erfolgreich) {
                             System.out.println("Versicherung dem Patienten erfolgreich zugepordnet.");
                         } else {
@@ -154,6 +141,24 @@ public class Patientenverwaltung {
                     pv.gibVersicherungAus(kv);
                     break;
                 }
+                case 7:
+                case 8: {
+                    List<Patient> sortedList = pv.kh.getPatienten().stream()
+                                .sorted(Comparator.comparing((auswahl == 7) ? Patient::getPatientennummer : Patient::getNachname))
+                                .collect(Collectors.toList());
+
+
+                    System.out.println("Es wurden " + sortedList.size() + " Patienten gefunden.");
+                    System.out.println("|Patientennummer|Anrede|Vorname        |Nachname       |");
+                    System.out.println("+---------------+------+---------------+---------------+");
+                    for (Patient p: sortedList) {
+                        System.out.printf("|%-15s|%-6s|%-15s|%-15s|\n", p.getPatientennummer(), p.getAnrede(), p.getName(), p.getNachname());
+                    }
+                    break;
+                }
+                case 9: {
+
+                }
                 default: {
                     // kann nicht auftreten, weil fehlerhafte eingabe wird vorher abgefangen
                 }
@@ -171,7 +176,10 @@ public class Patientenverwaltung {
         System.out.println("| (03) Patient anlegen und Patientennummer zuordnen                        |");
         System.out.println("| (04) Patient mit Versicherungen anzeigen (Auswahl durch Patientennummer) |");
         System.out.println("| (05) Patient mit Versicherungen anzeigen (Auswahl durch Name)            |");
-        System.out.println("| (06) Versicherung anzeigen (Auswahl durch Versicherungsnummer)           |");
+        System.out.println("| (06) Versicherung anzeigen (Auswahl durch KVN)                           |");
+        System.out.println("| (07) Alle Patienten sortiert nach aufsteigender Patientennummer anzeigen |");
+        System.out.println("| (08) Alle Patienten sortiert nach aufsteigendem Nachnamen                |");
+        System.out.println("| (09) Alle Krankenversicherungen unsortiert anzeigen                      |");
         System.out.println("|                                                                          |");
         System.out.println("| (00) Beenden                                                             |");
         System.out.println("+--------------------------------------------------------------------------+");
@@ -237,7 +245,7 @@ public class Patientenverwaltung {
 
         for(Patient p: this.kh.getPatienten()) {
             for(Krankenversicherung k: p.getKrankenversicherung()) {
-                if (k.getVersicherungsNummer().toLowerCase().matches(PLACEHOLDER + versicherungsId + PLACEHOLDER)) {
+                if (k.getKrankenversichertennummer().toLowerCase().matches(PLACEHOLDER + versicherungsId + PLACEHOLDER)) {
                     krankenversicherungen.add(k);
                 }
             }
@@ -249,7 +257,7 @@ public class Patientenverwaltung {
         } else if (krankenversicherungen.size() > 1) {
             System.out.println("Es wurden mehrere Krankenversicherungen zu dem Suchbegriff gefunden. Wählen Sie einen aus: ");
             for (int i = 0; i < krankenversicherungen.size(); i++) {
-                System.out.printf("(%2d) - %-15s %-30s\n", i, krankenversicherungen.get(i).getVersicherungsNummer(), krankenversicherungen.get(i).getName());
+                System.out.printf("(%2d) - %-15s %-30s\n", i, krankenversicherungen.get(i).getKrankenversichertennummer(), krankenversicherungen.get(i).getName());
             }
             int index = liesEingabe(sc, 0, krankenversicherungen.size() - 1);
 
@@ -300,13 +308,13 @@ public class Patientenverwaltung {
         System.out.println("======== KRANKENVERSICHERUNG ========");
         if (kv instanceof Privatversicherung) {
             System.out.printf(tabellenPattern, "Typ", "Privatversicherung");
-            System.out.printf(tabellenPattern, "Nummer", kv.getVersicherungsNummer());
+            System.out.printf(tabellenPattern, "Nummer", kv.getKrankenversichertennummer());
             System.out.printf(tabellenPattern, "Name", kv.getName());
             System.out.printf("%-20s : %-30.2fs\n", "Deckungslimit", ((Privatversicherung) kv).getDeckungslimit());
         }
         else if (kv instanceof GesetzlicheVersicherung) {
             System.out.printf(tabellenPattern, "Typ", "Gesetzliche Versicherung");
-            System.out.printf(tabellenPattern, "Nummer", kv.getVersicherungsNummer());
+            System.out.printf(tabellenPattern, "Nummer", kv.getKrankenversichertennummer());
             System.out.printf(tabellenPattern, "Name", kv.getName());
             System.out.printf(tabellenPattern, "Familienvers.", ((GesetzlicheVersicherung) kv).isIstFamilienVersicherung());
         }

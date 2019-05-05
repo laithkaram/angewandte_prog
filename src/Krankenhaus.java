@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Krankenhaus {
 
@@ -8,6 +9,7 @@ public class Krankenhaus {
     private String ust_idnr;
     private Adresse adresse;
     private ArrayList<Patient> patienten;
+    private HashMap<String, Krankenversicherung> krankenversicherungHashMap;
 
     /**
      * @return tabNamen(String[ ]) die Tabellennamen der entsprechenden
@@ -34,6 +36,14 @@ public class Krankenhaus {
      */
     public ArrayList<Patient> getPatienten() {
         return this.patienten;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public HashMap<String, Krankenversicherung> getKrankenversicherungHashMap() {
+        return krankenversicherungHashMap;
     }
 
     /**

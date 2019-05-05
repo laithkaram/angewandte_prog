@@ -1,10 +1,8 @@
-
-
 public abstract class Krankenversicherung {
 	private static int ID_COUNTER = 10000;
 
 	private String name;
-	private String versicherungsNummer;
+	private String krankenversichertennummer;
 
 
 	/**
@@ -14,7 +12,7 @@ public abstract class Krankenversicherung {
 	
 	public Krankenversicherung(String name) {
 		this.name = name;
-		this.versicherungsNummer = "V-" + ID_COUNTER++;
+		this.krankenversichertennummer = "V-" + ID_COUNTER++;
 	}
 
 
@@ -42,16 +40,16 @@ public abstract class Krankenversicherung {
 	 * @return nummer
 	 * 
 	 */
-	public String getVersicherungsNummer() {
-		return versicherungsNummer;
+	public String getKrankenversichertennummer() {
+		return krankenversichertennummer;
 	}
 
 	/**
 	 *
-	 * @param versicherungsNummer
+	 * @param krankenversichertennummer
 	 */
-	public void setVersicherungsNummer(String versicherungsNummer) {
-		this.versicherungsNummer = versicherungsNummer;
+	public void setKrankenversichertennummer(String krankenversichertennummer) {
+		this.krankenversichertennummer = krankenversichertennummer;
 	}
 
 	/**
@@ -66,17 +64,21 @@ public abstract class Krankenversicherung {
 		}
 		else if (obj instanceof Krankenversicherung){
 			Krankenversicherung k = (Krankenversicherung) obj;
-			if (this.name == k.name && this.versicherungsNummer == k.versicherungsNummer) {
+			if (this.name == k.name && this.krankenversichertennummer == k.krankenversichertennummer) {
 				return true;
 			}
 		}
 		return false;
 	}
 
+	@Override
+	public int hashCode() {
+		return this.krankenversichertennummer.hashCode();
+	}
 
 	@Override
 	public String toString() {
-		return "{ Name: "+ this.name + ", Versicherungsnummer: " + this.versicherungsNummer + "}";
+		return "{ Name: "+ this.name + ", Versicherungsnummer: " + this.krankenversichertennummer + "}";
 	}
 	
 	
