@@ -98,7 +98,18 @@ public class Patient {
 		return nachname;
 	}
 
+	/**
+	 * fuer das suchen in alphabetischer reihenfolge
+	 * @return
+	 */
+	public String getNachnameInLowerCase() {
+		return nachname.toLowerCase();
+	}
 
+	/**
+	 *
+	 * @param nachname
+	 */
 	public void setNachname(String nachname) {
 		this.nachname = nachname;
 	}

@@ -101,9 +101,9 @@ public class Patientenverwaltung {
                     Patient p = pv.searchPatient(sc, false);
                     if (p != null) {
                         boolean erfolgreich = p.getKrankenversicherung().add(kv);
-                        pv.kh.getKrankenversicherungHashMap().put(kv.getKrankenversichertennummer(), kv);
                         if (erfolgreich) {
                             System.out.println("Versicherung dem Patienten erfolgreich zugepordnet.");
+                            pv.kh.getKrankenversicherungHashMap().put(kv.getKrankenversichertennummer(), kv);
                         } else {
                             System.out.println("Der Vorgang war nicht erfolgreich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.");
                         }
@@ -144,7 +144,7 @@ public class Patientenverwaltung {
                 case 7:
                 case 8: {
                     List<Patient> sortedList = pv.kh.getPatienten().stream()
-                                .sorted(Comparator.comparing((auswahl == 7) ? Patient::getPatientennummer : Patient::getNachname))
+                                .sorted(Comparator.comparing((auswahl == 7) ? Patient::getPatientennummer : Patient::getNachnameInLowerCase))
                                 .collect(Collectors.toList());
 
 
@@ -157,7 +157,14 @@ public class Patientenverwaltung {
                     break;
                 }
                 case 9: {
-
+                    Collection<Krankenversicherung> liste = pv.kh.getKrankenversicherungHashMap().values();
+                    System.out.println("Es wurden " + liste.size() + " Krankenversicherungen gefunden.");
+                    System.out.println("|Versichertennummer  |Versicherung                            |");
+                    System.out.println("+--------------------+----------------------------------------+");
+                    for (Krankenversicherung k: liste) {
+                        System.out.printf("|%-20s|%-40s|\n", k.getKrankenversichertennummer(), k.getName());
+                    }
+                    break;
                 }
                 default: {
                     // kann nicht auftreten, weil fehlerhafte eingabe wird vorher abgefangen

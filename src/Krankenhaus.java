@@ -28,6 +28,7 @@ public class Krankenhaus {
 
         this.adresse = adresse;
         this.patienten = new ArrayList<>();
+        this.krankenversicherungHashMap = new HashMap<>();
     }
 
     /**
@@ -55,6 +56,9 @@ public class Krankenhaus {
     public boolean addPatient(Patient patient) {
         if (this.patienten.size() < MAX_PATIENTEN) {
             this.patienten.add(patient);
+            for(Krankenversicherung k: patient.getKrankenversicherung()) {
+                this.getKrankenversicherungHashMap().put(k.getKrankenversichertennummer(), k);
+            }
             return true;
         }
         else {
