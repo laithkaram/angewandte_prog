@@ -1,31 +1,62 @@
+public abstract class Krankenversicherung {
+	private static int ID_COUNTER = 10000;
 
-public class Krankenversicherung extends Object {
 	private String name;
-	private int nummer;
+	private String krankenversichertennummer;
 
+
+	/**
+	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
+	 * @param name , nummer	 
+	 */
 	
-	
-	public Krankenversicherung(String name, int nummer) {
+	public Krankenversicherung(String name) {
 		this.name = name;
-		this.nummer = nummer;
+		this.krankenversichertennummer = "V-" + ID_COUNTER++;
 	}
 
+
+	abstract double calculateCoverage(double cost, int quarter, int previousQuarter);
+
+	
+	/**
+	 * gibt den name der krankenverischrung zureuck
+	 * @return name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
+	 * @return true, wenn erfolgreich hinzugefuegt, ansonsten false
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public int getNummer() {
-		return nummer;
+	/**
+	 * die krankenversicherungsnummer
+	 * @return nummer
+	 * 
+	 */
+	public String getKrankenversichertennummer() {
+		return krankenversichertennummer;
 	}
 
-	public void setNummer(int nummer) {
-		this.nummer = nummer;
+	/**
+	 *
+	 * @param krankenversichertennummer
+	 */
+	public void setKrankenversichertennummer(String krankenversichertennummer) {
+		this.krankenversichertennummer = krankenversichertennummer;
 	}
 
+	/**
+	 *eine ubernehmende Override methode
+	 *erzeugt dass die verischerungsnummer gleich sind dann gibt er true 
+	 *ansonsten gibt er false
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -33,7 +64,7 @@ public class Krankenversicherung extends Object {
 		}
 		else if (obj instanceof Krankenversicherung){
 			Krankenversicherung k = (Krankenversicherung) obj;
-			if (this.name == k.name && this.nummer == k.nummer) {
+			if (this.name == k.name && this.krankenversichertennummer == k.krankenversichertennummer) {
 				return true;
 			}
 		}
@@ -41,8 +72,13 @@ public class Krankenversicherung extends Object {
 	}
 
 	@Override
+	public int hashCode() {
+		return this.krankenversichertennummer.hashCode();
+	}
+
+	@Override
 	public String toString() {
-		return "{ name: "+ this.name + ", nummer: " + this.nummer + "}";
+		return "{ Name: "+ this.name + ", Versicherungsnummer: " + this.krankenversichertennummer + "}";
 	}
 	
 	
