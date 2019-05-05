@@ -107,7 +107,7 @@ public class Patient {
 	}
 
 	/**
-	 *
+	 * Set Nachname
 	 * @param nachname
 	 */
 	public void setNachname(String nachname) {
