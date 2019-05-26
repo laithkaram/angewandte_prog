@@ -86,7 +86,7 @@ public class Patientenverwaltung {
 
         while (auswahl != 0) {
             showMenu();
-            auswahl = liesEingabe(sc, 0, 9);
+            auswahl = liesEingabe(sc, 0, 12);
 
             switch (auswahl) {
                 case 1:
@@ -166,6 +166,12 @@ public class Patientenverwaltung {
                     }
                     break;
                 }
+                case 10:
+                    break;
+                case 11:
+                    break;
+                case 12:
+                    break;
                 default: {
                     // kann nicht auftreten, weil fehlerhafte eingabe wird vorher abgefangen
                 }
@@ -187,11 +193,27 @@ public class Patientenverwaltung {
         System.out.println("| (07) Alle Patienten sortiert nach aufsteigender Patientennummer anzeigen |");
         System.out.println("| (08) Alle Patienten sortiert nach aufsteigendem Nachnamen                |");
         System.out.println("| (09) Alle Krankenversicherungen unsortiert anzeigen                      |");
+        System.out.println("| (10) Daten Export                                                        |");
+        System.out.println("| (11) Daten Import                                                        |");
+        System.out.println("| (12) Patienten nach Namen sortiert als CSV-Datei exportieren             |");
         System.out.println("|                                                                          |");
         System.out.println("| (00) Beenden                                                             |");
         System.out.println("+--------------------------------------------------------------------------+");
     }
 
+    /**
+     * Liesst die Eingabe des Benutzers von der Koncole und verifiziert, dass die Eingabe
+     * zwischen 'min'(eingedschlossen) und 'max'(eingeschlossen) liegt.
+     *
+     * also min <= x <= max
+     *
+     * Es wird solange wiederholt gefragt, bis die Eingabe korrekt ist.
+     *
+     * @param sc
+     * @param min
+     * @param max
+     * @return
+     */
     private static int liesEingabe(Scanner sc, int min, int max) {
         int eingabe = -1;
 
