@@ -19,6 +19,7 @@ public class Patientenverwaltung {
     /**
      * create dummy data
      */
+    @Deprecated()
     private void loadDumb() {
         try {
             kh = new Krankenhaus("Helios Krankenhaus", "DE812524991", new Adresse("Schwanebecker Chaussee 50", "", 13125, "Berlin"));
@@ -83,7 +84,7 @@ public class Patientenverwaltung {
         Scanner sc = new Scanner(System.in);
 
         Patientenverwaltung pv = new Patientenverwaltung();
-        pv.loadDumb();
+        //pv.loadDumb();
 
         int auswahl = -1;
 
@@ -91,6 +92,10 @@ public class Patientenverwaltung {
             showMenu();
             auswahl = liesEingabe(sc, 0, 12);
 
+            if (pv.kh == null && auswahl != 11) {
+                System.out.println("Krankenhaus nicht definiert --> Importieren Sie zuerst eine Datei.");
+                continue;
+            }
             switch (auswahl) {
                 case 1:
                 case 2: {
@@ -169,10 +174,9 @@ public class Patientenverwaltung {
                     }
                     break;
                 }
-                case 10:
+                case 10: {
                     System.out.println("Geben Sie einen Dateinamen an:");
-                    String eingabe = sc.nextLine();
-                    String filename = eingabe.trim() + ((eingabe.trim().endsWith(".ser")) ? "": ".ser");
+                    String filename = sc.nextLine();
                     boolean success = SerializablePersistenceManager.exportData(pv.kh, filename);
 
                     if (success) {
@@ -181,15 +185,25 @@ public class Patientenverwaltung {
                         System.out.println("Daten konnten nicht exportiert werden");
                     }
                     break;
-                case 11:
+                }
+                case 11: {
+                    System.out.println("Geben Sie die zu importierende Datei an:");
+                    String filename = sc.nextLine();
+                    Krankenhaus kh = SerializablePersistenceManager.importData(filename);
+                    if (kh != null) {
+                        pv.kh = kh;
+                        System.out.println("Daten erfolgreich importiert.");
+                    } else {
+                        System.out.println("Daten konnten nicht importiert werden.");
+                    }
                     break;
+                }
                 case 12:
                     break;
                 default: {
                     // kann nicht auftreten, weil fehlerhafte eingabe wird vorher abgefangen
                 }
             }
-
         }
     }
 
