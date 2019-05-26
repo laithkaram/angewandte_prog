@@ -1,6 +1,9 @@
+package data;
+
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class GesetzlicheVersicherung extends Krankenversicherung {
+public class GesetzlicheVersicherung extends Krankenversicherung implements Serializable {
 	
 	private boolean istFamilienVersicherung;
 	

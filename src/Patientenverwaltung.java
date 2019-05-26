@@ -1,3 +1,7 @@
+import data.*;
+import persistence.CSVPersistenceManager;
+import persistence.SerializablePersistenceManager;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,6 +20,7 @@ public class Patientenverwaltung {
     /**
      * create dummy data
      */
+    @Deprecated()
     private void loadDumb() {
         try {
             kh = new Krankenhaus("Helios Krankenhaus", "DE812524991", new Adresse("Schwanebecker Chaussee 50", "", 13125, "Berlin"));
@@ -80,14 +85,18 @@ public class Patientenverwaltung {
         Scanner sc = new Scanner(System.in);
 
         Patientenverwaltung pv = new Patientenverwaltung();
-        pv.loadDumb();
+        //pv.loadDumb();
 
         int auswahl = -1;
 
         while (auswahl != 0) {
             showMenu();
-            auswahl = liesEingabe(sc, 0, 9);
+            auswahl = liesEingabe(sc, 0, 12);
 
+            if (pv.kh == null && auswahl != 11) {
+                System.out.println("Krankenhaus nicht definiert --> Importieren Sie zuerst eine Datei.");
+                continue;
+            }
             switch (auswahl) {
                 case 1:
                 case 2: {
@@ -166,11 +175,43 @@ public class Patientenverwaltung {
                     }
                     break;
                 }
+                case 10: {
+                    System.out.println("Geben Sie einen Dateinamen an:");
+                    String filename = sc.nextLine();
+                    boolean success = SerializablePersistenceManager.exportData(pv.kh, filename);
+
+                    if (success) {
+                        System.out.println("Daten erfolgreich exportiert.");
+                    } else {
+                        System.out.println("Daten konnten nicht exportiert werden");
+                    }
+                    break;
+                }
+                case 11: {
+                    System.out.println("Geben Sie die zu importierende Datei an:");
+                    String filename = sc.nextLine();
+                    Krankenhaus kh = SerializablePersistenceManager.importData(filename);
+                    if (kh != null) {
+                        pv.kh = kh;
+                        System.out.println("Daten erfolgreich importiert.");
+                    } else {
+                        System.out.println("Daten konnten nicht importiert werden.");
+                    }
+                    break;
+                }
+                case 12:
+                    System.out.println("Geben Sie einen Dateinamen an:");
+                    String filename = sc.nextLine();
+                    String path = CSVPersistenceManager.exportPatientsOrderByName(pv.kh, filename);
+                    if (path != null) {
+                        int n = pv.kh.getPatienten().size();
+                        System.out.println(n + " Datensätze in die Datei \"" + path + "\" exportiert.");
+                    }
+                    break;
                 default: {
                     // kann nicht auftreten, weil fehlerhafte eingabe wird vorher abgefangen
                 }
             }
-
         }
     }
 
@@ -187,11 +228,27 @@ public class Patientenverwaltung {
         System.out.println("| (07) Alle Patienten sortiert nach aufsteigender Patientennummer anzeigen |");
         System.out.println("| (08) Alle Patienten sortiert nach aufsteigendem Nachnamen                |");
         System.out.println("| (09) Alle Krankenversicherungen unsortiert anzeigen                      |");
+        System.out.println("| (10) Daten Export                                                        |");
+        System.out.println("| (11) Daten Import                                                        |");
+        System.out.println("| (12) Patienten nach Namen sortiert als CSV-Datei exportieren             |");
         System.out.println("|                                                                          |");
         System.out.println("| (00) Beenden                                                             |");
         System.out.println("+--------------------------------------------------------------------------+");
     }
 
+    /**
+     * Liesst die Eingabe des Benutzers von der Koncole und verifiziert, dass die Eingabe
+     * zwischen 'min'(eingedschlossen) und 'max'(eingeschlossen) liegt.
+     *
+     * also min <= x <= max
+     *
+     * Es wird solange wiederholt gefragt, bis die Eingabe korrekt ist.
+     *
+     * @param sc
+     * @param min
+     * @param max
+     * @return
+     */
     private static int liesEingabe(Scanner sc, int min, int max) {
         int eingabe = -1;
 

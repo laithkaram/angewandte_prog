@@ -1,6 +1,9 @@
+package data;
+
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class Privatversicherung extends Krankenversicherung {
+public class Privatversicherung extends Krankenversicherung implements Serializable{
 
 	private double deckungslimit;
 	

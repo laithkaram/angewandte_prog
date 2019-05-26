@@ -1,4 +1,11 @@
-public abstract class Krankenversicherung {
+package data;
+
+import java.io.Serializable;
+
+/**
+ *
+ */
+public abstract class Krankenversicherung implements Serializable {
 	private static int ID_COUNTER = 10000;
 
 	private String name;
