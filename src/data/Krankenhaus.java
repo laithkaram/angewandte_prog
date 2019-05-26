@@ -1,7 +1,10 @@
+package data;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Krankenhaus {
+public class Krankenhaus implements Serializable {
 
     public static final int MAX_PATIENTEN = 50;
 
@@ -16,7 +19,6 @@ public class Krankenhaus {
      * Datenbank werden in einem Array zurückgegeben.
      * @throws Exception Fehlerbehandlung der Methode.
      */
-
     public Krankenhaus(String name, String ust_idnr, Adresse adresse) throws Exception {
         super();
         this.name = name;

@@ -1,9 +1,12 @@
+package data;
+
+import java.io.Serializable;
 import java.util.Scanner;
 
 /**
  * @author laithkaram
  */
-public class Adresse {
+public class Adresse implements Serializable {
 
     private String adresse1;
     private String adresse2;

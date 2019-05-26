@@ -1,3 +1,6 @@
+package data;
+
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,8 +11,7 @@ import java.util.Scanner;
  * @author laithkaram
  *
  */
-
-public class Patient {
+public class Patient implements Serializable {
 
 	private static int COUNTER_ID = 20_000;
 
@@ -314,12 +316,3 @@ public class Patient {
 		}
 	}
 }
-
-/**
-* enum class 
-* unterscheidet zwischen dem gender von patienten
-*/
-enum Anrede {
-	HERR,
-	FRAU;
-};

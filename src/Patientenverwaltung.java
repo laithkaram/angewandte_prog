@@ -1,3 +1,6 @@
+import data.*;
+import persistence.SerializablePersistenceManager;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -167,6 +170,16 @@ public class Patientenverwaltung {
                     break;
                 }
                 case 10:
+                    System.out.println("Geben Sie einen Dateinamen an:");
+                    String eingabe = sc.nextLine();
+                    String filename = eingabe.trim() + ((eingabe.trim().endsWith(".ser")) ? "": ".ser");
+                    boolean success = SerializablePersistenceManager.exportData(pv.kh, filename);
+
+                    if (success) {
+                        System.out.println("Daten erfolgreich exportiert.");
+                    } else {
+                        System.out.println("Daten konnten nicht exportiert werden");
+                    }
                     break;
                 case 11:
                     break;
