@@ -1,4 +1,5 @@
 import data.*;
+import persistence.CSVPersistenceManager;
 import persistence.SerializablePersistenceManager;
 
 import java.text.SimpleDateFormat;
@@ -199,6 +200,13 @@ public class Patientenverwaltung {
                     break;
                 }
                 case 12:
+                    System.out.println("Geben Sie einen Dateinamen an:");
+                    String filename = sc.nextLine();
+                    String path = CSVPersistenceManager.exportPatientsOrderByName(pv.kh, filename);
+                    if (path != null) {
+                        int n = pv.kh.getPatienten().size();
+                        System.out.println(n + " Datensätze in die Datei \"" + path + "\" exportiert.");
+                    }
                     break;
                 default: {
                     // kann nicht auftreten, weil fehlerhafte eingabe wird vorher abgefangen

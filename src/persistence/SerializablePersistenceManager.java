@@ -1,6 +1,7 @@
 package persistence;
 
 import data.Krankenhaus;
+import utils.FileManager;
 
 import java.io.*;
 
@@ -11,7 +12,7 @@ public class SerializablePersistenceManager {
 
         // Serialization
         try {
-            filename = manipulateFilename(filename);
+            filename = FileManager.manipulateFilename(filename);
 
             // Saving of object in a file
             FileOutputStream fileStream = new FileOutputStream(filename);
@@ -35,7 +36,7 @@ public class SerializablePersistenceManager {
 
         // Deserialization
         try {
-            filename = manipulateFilename(filename);
+            filename = FileManager.manipulateFilename(filename);
 
             // Reading the object from a file
             FileInputStream file = new FileInputStream(filename);
@@ -54,21 +55,4 @@ public class SerializablePersistenceManager {
         return kh;
     }
 
-    private static String manipulateFilename(String filename) {
-        // erstelle Ordner falls nicht existiert
-        File directory = new File("./storage");
-        if(!directory.exists()){
-            directory.mkdir();
-        }
-
-        filename = filename.trim();
-        filename += ((filename.endsWith(".ser")) ? "": ".ser");
-
-        // Aendere Dateinamen falls nicht mit Storage beginnent.
-        if (!filename.startsWith("./storage/")) {
-            filename = "./storage/" + filename;
-        }
-
-        return filename;
-    }
 }
