@@ -85,7 +85,7 @@ public class Patientenverwaltung {
         Scanner sc = new Scanner(System.in);
 
         Patientenverwaltung pv = new Patientenverwaltung();
-        //pv.loadDumb();
+       // pv.loadDumb();
 
         int auswahl = -1;
 
@@ -215,6 +215,9 @@ public class Patientenverwaltung {
         }
     }
 
+    /**
+     * die methode zeigt die hauptmenu .
+     */
     private static void showMenu() {
         System.out.println("+--------------------------------------------------------------------------+");
         System.out.println("|                                HAUPTMENU                                 |");
@@ -244,10 +247,10 @@ public class Patientenverwaltung {
      *
      * Es wird solange wiederholt gefragt, bis die Eingabe korrekt ist.
      *
-     * @param sc
-     * @param min
-     * @param max
-     * @return
+     * @param sc scanner eingabe
+     * @param min minimalwert
+     * @param max maximalwert
+     * @return eingabe , der eingegebene wert
      */
     private static int liesEingabe(Scanner sc, int min, int max) {
         int eingabe = -1;
@@ -268,6 +271,12 @@ public class Patientenverwaltung {
         return eingabe;
     }
 
+    /**
+     *
+     * @param sc scanner
+     * @param byName name
+     * @return foundPatients.get(0) , die gefundene patienten
+     */
     private Patient searchPatient(Scanner sc, boolean byName) {
         String nameOrId = sc.nextLine().toLowerCase();
 
@@ -302,6 +311,11 @@ public class Patientenverwaltung {
         }
     }
 
+    /**
+     * Sucht die krankenversicherung und gibt die zureck un prueft ob die id numer mit der krankenversichrungen gefgunden wird
+     * @param sc Scanner
+     * @return krankenversicherungen.get(0) krankenversicherung
+     */
     private Krankenversicherung searchKrankenversicherung(Scanner sc) {
         String versicherungsId = sc.nextLine().toLowerCase();
 
@@ -331,6 +345,10 @@ public class Patientenverwaltung {
         }
     }
 
+    /**
+     *Ausgabe der Patienten
+     * @param p Patient
+     */
     private void gibPatientAus(Patient p) {
         if (p == null) {
             return;
@@ -362,6 +380,10 @@ public class Patientenverwaltung {
         System.out.println(sb.toString());
     }
 
+    /**
+     *gibt die krankenversicherung raus
+     * @param kv Krankenbersicherung
+     */
     private void gibVersicherungAus(Krankenversicherung kv) {
         if (kv == null) {
             return;

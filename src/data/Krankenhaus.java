@@ -34,8 +34,8 @@ public class Krankenhaus implements Serializable {
     }
 
     /**
-     *
-     * @return
+     *Liste der Patienten
+     * @return this.patienten , Die Patienten
      */
     public ArrayList<Patient> getPatienten() {
         return this.patienten;
@@ -43,7 +43,7 @@ public class Krankenhaus implements Serializable {
 
     /**
      *
-     * @return
+     * @return krankenversicherungHashMap die krankenversicherung
      */
     public HashMap<String, Krankenversicherung> getKrankenversicherungHashMap() {
         return krankenversicherungHashMap;
@@ -52,7 +52,7 @@ public class Krankenhaus implements Serializable {
     /**
      * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
      *
-     * @param patient
+     * @param patient patient
      * @return true, wenn erfolgreich hinzugefuegt, ansonsten false
      */
     public boolean addPatient(Patient patient) {
@@ -72,7 +72,7 @@ public class Krankenhaus implements Serializable {
     /**
      * pruft ob der patient in der list im krankenhaussteht , wenn der patient nicht gleich ist dann wurd INFO als patient nicht gefunden gegeben
      *
-     * @param patient
+     * @param patient patient
      * @return true, wenn erfolgreich hinzugefuegt, ansonsten false
      */
     public boolean removePatient(Patient patient) {
@@ -102,27 +102,26 @@ public class Krankenhaus implements Serializable {
     }
 
     /**
-     * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
-     *
-     * @param name
+     * liegt den name der patientn ein
+     * @param name name
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
+     * Fuegt die Inifikationsnummer der patient.
      *
-     * @return indifikationsnummer
+     * @return ust_idnr ,indifikationsnummer
      */
     public String getUstIdnr() {
         return ust_idnr;
     }
 
     /**
-     * die indifikations nummer von dem krankenhaus
      *
-     * @param ust_idnr
+     *
+     * @param ust_idnr indifikationsnummer
      */
 
     public void setUstIdnr(String ust_idnr) {
@@ -130,18 +129,18 @@ public class Krankenhaus implements Serializable {
     }
 
     /**
-     * adresse des krankenhaUS
+     * liegt die Adresse an
      *
-     * @return adresse
+     * @return adresse , adresse
      */
     public Adresse getAdresse() {
         return adresse;
     }
 
     /**
-     * gibt die adresse von dem krankenhaus.
      *
-     * @param adresse
+     *
+     * @param adresse adresse
      */
     public void setAdresse(Adresse adresse) {
         this.adresse = adresse;
@@ -149,9 +148,10 @@ public class Krankenhaus implements Serializable {
 
 
     /**
-     * eine ubernehmende override methode erzeugt die adresse und den name von dem krankenhaus und gibt die zureck
      *
-     * @return, adresse , name
+     * @return name , name
+     * @return ust_idnr , indifikationsnummer
+     * @return adresse , die adresse
      */
     @Override
     public String toString() {

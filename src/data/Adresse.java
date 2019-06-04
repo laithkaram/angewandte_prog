@@ -34,21 +34,23 @@ public class Adresse implements Serializable {
     /**
      * Fuegt die erste adresse von den patienten
      *
-     * @return adresse1
+     * @return adresse1 , die erste Adresse
      */
     public String getAdresse1() {
         return adresse1;
     }
 
     /**
-     * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
+     * liegt due erste Adresse an .
+     * @param adresse1 die erste Adresse
      */
     public void setAdresse1(String adresse1) {
         this.adresse1 = adresse1;
     }
 
     /**
-     * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
+     * gibt die Zweite adresse ein
+     * @return adresse2 , die zweite Adresse
      */
     public String getAdresse2() {
         return adresse2;
@@ -66,7 +68,7 @@ public class Adresse implements Serializable {
     /**
      * erzeugt den postleizahl von dem patient und gibt den zureck
      *
-     * @return postleizahl
+     * @return postleizahl , postleizahl
      */
     public int getPostleizahl() {
         return postleizahl;
@@ -75,7 +77,7 @@ public class Adresse implements Serializable {
     /**
      * Fuegt den postleizahl einem patienten
      *
-     * @param postleizahl
+     * @param postleizahl postleizahl
      */
     public void setPostleizahl(int postleizahl) {
         this.postleizahl = postleizahl;
@@ -84,7 +86,7 @@ public class Adresse implements Serializable {
     /**
      * gibt den ort zureck
      *
-     * @return ort
+     * @return ort ,Ort
      */
     public String getOrt() {
         return ort;
@@ -100,9 +102,8 @@ public class Adresse implements Serializable {
     }
 
     /**
-     * eine ubernehmende Overrive methode gibt die adresse daten von den patienten an
-     *
-     * @return , adresse1,adresse2,ort,postleizahl
+     * gibt den Stering bei eingabe der nummer
+     * @return override methode
      */
     @Override
     public String toString() {
@@ -110,6 +111,10 @@ public class Adresse implements Serializable {
                 + ort + "}";
     }
 
+    /**
+     *liegt eine neue Adresse ein und wird bei postleizahl ein fehler gesucht
+     * @return Adresse , new Adress
+     */
     public static Adresse neuAnlegen() {
         System.out.println(" ====== ANLEGEN EINER NEUEN ADRESSE ====== ");
         Scanner sc = new Scanner(System.in);

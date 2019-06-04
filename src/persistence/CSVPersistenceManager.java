@@ -15,6 +15,12 @@ public class CSVPersistenceManager {
 
     private static String NEWLINE = "\r\n";
 
+    /**
+     *
+     * @param kh Krankenhaus
+     * @param filename filename der patientn
+     * @return file.getAbsolutePath(), File
+     */
     public static String exportPatientsOrderByName(Krankenhaus kh, String filename) {
         List<Patient> sortedList = kh.getPatienten().stream()
                 .sorted(Comparator.comparing(Patient::getNachnameInLowerCase))
