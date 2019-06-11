@@ -1,5 +1,7 @@
 package data;
 
+import utils.ScannerUtils;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -255,7 +257,8 @@ public class Patient implements Serializable {
 
 		Adresse adresse = Adresse.neuAnlegen();
 
-		Date gebDatum = liesGebDatumEin(sc);
+		System.out.println("Geburtsdatum (dd.mm.yyyy):");
+		Date gebDatum = ScannerUtils.liesDatumEin(sc);
 		System.out.println("Telefonnummer: ");
 		String telefonnummer = sc.nextLine();
 		System.out.println("Email-Adresse: ");
@@ -294,23 +297,5 @@ public class Patient implements Serializable {
 			}
 		}
 		return anrede;
-	}
-
-	/**
-	 *liest die eingabe von dem Datum in bestimmterreinfolge dd.mm.yyyy
-	 * @param sc scanner
-	 * @return date, Datum
-	 */
-	private static Date liesGebDatumEin(Scanner sc) {
-		System.out.println("Geburtsdatum (dd.mm.yyyy):");
-		while(true) {
-			String gebDatumString = sc.nextLine();
-			try {
-				Date date = new SimpleDateFormat("dd.MM.yyyy").parse(gebDatumString);
-				return date;
-			} catch (Exception e) {
-				System.out.println("Datum bitte in dem Format dd.MM.yyyy eingeben: ");
-			}
-		}
 	}
 }
