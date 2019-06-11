@@ -7,7 +7,13 @@ import java.io.*;
 
 public class SerializablePersistenceManager {
 
-
+    /**
+     *
+     * @param kh krankenhaus
+     * @param filename der name von dem file
+     * @return true ,  wenn der datei gefunden wird
+     * @return false , wenn der datei nicht gefunden wird
+     */
     public static boolean exportData(Krankenhaus kh, String filename) {
 
         // Serialization
@@ -31,6 +37,11 @@ public class SerializablePersistenceManager {
         return false;
     }
 
+    /**
+     *
+     * @param filename der name von dem file
+     * @return kh , krankenhaus
+     */
     public static Krankenhaus importData(String filename) {
         Krankenhaus kh = null;
 

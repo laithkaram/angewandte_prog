@@ -6,11 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-/**
- * 
- * @author laithkaram
- *
- */
+
 public class Patient implements Serializable {
 
 	private static int COUNTER_ID = 20_000;
@@ -31,12 +27,12 @@ public class Patient implements Serializable {
 	/**
 	 * Fuegt einen Patienten in die Liste, wenn freier Platz verfuegbar ist.
 	 * @param anrede {@link Anrede}
-	 * @param name the given surname
-	 * @param nachname the given name
-	 * @param adresse
-	 * @param geburtsdatum
-	 * @param telefonnummer
-	 * @param emailadresse
+	 * @param name Vorname
+	 * @param nachname nachname
+	 * @param adresse Die Adresse
+	 * @param geburtsdatum Geburstagdatum
+	 * @param telefonnummer telefonnummer
+	 * @param emailadresse die Emailadresse
 	 */
 	public Patient(Anrede anrede, String name, String nachname, Adresse adresse, Date geburtsdatum,
 			String telefonnummer, String emailadresse) {
@@ -53,8 +49,8 @@ public class Patient implements Serializable {
 	}
 
 	/**
-	 * Fuegt die patiente nummer und gibt die zureck
-	 * @return patientnummer
+	 * gebt die patientnummer
+	 * @return patientennummer, patientennummer
 	 */
 	public String getPatientennummer() {
 		return patientennummer;
@@ -62,7 +58,7 @@ public class Patient implements Serializable {
 
 	/**
 	 * Fuegt eine anrede fue die patienten ung gibt die zureck
-	 * @return anrede
+	 * @return anrede , anrede Frau oder Man
 	 */
 	public Anrede getAnrede() {
 		return anrede;
@@ -70,14 +66,14 @@ public class Patient implements Serializable {
 
 	/**
 	 *
-	 * @param anrede
+	 * @param anrede anrede Frau oder man
 	 */
 	public void setAnrede(Anrede anrede) {
 		this.anrede = anrede;
 	}
 
 	/**
-	 * erzeugt den namen von den Patientenund gibt es zureuck
+	 * erzeugt den namen von den Patienten und gibt es zureuck
 	 * @return Name, der name von dem Patient
 	 */
 	public String getName() {
@@ -86,7 +82,7 @@ public class Patient implements Serializable {
 
 	/**
 	 * name von dem patient
-	 * @param name
+	 * @param name name von dem patient
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -101,16 +97,16 @@ public class Patient implements Serializable {
 	}
 
 	/**
-	 * fuer das suchen in alphabetischer reihenfolge
-	 * @return
+	 * fuegt das suchen in alphabetischer reihenfolge
+	 * @return nachname.toLowerCase() , Der Nachname
 	 */
 	public String getNachnameInLowerCase() {
 		return nachname.toLowerCase();
 	}
 
 	/**
-	 * Set Nachname
-	 * @param nachname
+	 * setzt den nachname
+	 * @param nachname nahcname
 	 */
 	public void setNachname(String nachname) {
 		this.nachname = nachname;
@@ -118,7 +114,7 @@ public class Patient implements Serializable {
 
 	/**
 	 * erzeugt die adresse von den patienten
-	 * @return adresse
+	 * @return adresse , die adresse
 	 */
 	public Adresse getAdresse() {
 		return adresse;
@@ -133,56 +129,56 @@ public class Patient implements Serializable {
 	}
 
 	/**
-	 *
-	 * @return
+	 * liste der krankenversicherung.
+	 * @return krankenversicherung , Die krankenversicherung
 	 */
 	public ArrayList<Krankenversicherung> getKrankenversicherung() {
 		return krankenversicherung;
 	}
 
 	/**
-	 *
-	 * @return
+	 *gibt den geburstagsdatum
+	 * @retur geburstagdatum, geburstagfdatum
 	 */
 	public Date getGeburtsdatum() {
 		return geburtsdatum;
 	}
 
 	/**
-	 *
-	 * @param geburtsdatum
+	 * setzt den geburstagsdatum
+	 * @param geburtsdatum geburstagsdatum
 	 */
 	public void setGeburtsdatum(Date geburtsdatum) {
 		this.geburtsdatum = geburtsdatum;
 	}
 
 	/**
-	 *
-	 * @return
+	 *erzeugt die telefonnumeer und gibt die zureck
+	 * @return telefonnummer , telefonnummer
 	 */
 	public String getTelefonnummer() {
 		return telefonnummer;
 	}
 
 	/**
-	 *
-	 * @param telefonnummer
+	 *setzt die telefonnummer
+	 * @param telefonnummer , telefonnummer
 	 */
 	public void setTelefonnummer(String telefonnummer) {
 		this.telefonnummer = telefonnummer;
 	}
 
 	/**
-	 *
-	 * @return
+	 *erzeugt die emailadresse und gibt die zureck
+	 * @return emailadresse, emailadresse
 	 */
 	public String getEmailadresse() {
 		return emailadresse;
 	}
 
 	/**
-	 *
-	 * @param emailadresse
+	 *setzt die email adresse
+	 * @param emailadresse  emailadresse
 	 */
 	public void setEmailadresse(String emailadresse) {
 		this.emailadresse = emailadresse;
@@ -192,8 +188,9 @@ public class Patient implements Serializable {
 	* eine ubernehmende Override methode
 	* falls zwei personen den gleiche vor und nachname haben und den gleichen geburtsagdatum 
 	*
-	* @param obj
-	* @return ,true 
+	* @param obj Object
+	* @return true , wenn die gleich sind
+	 * @return false , wenn die ungleich sind
 	*/
 	@Override
 	public boolean equals(Object obj) {
@@ -212,7 +209,7 @@ public class Patient implements Serializable {
 	/**
 	 * eine uberhnehmende Ovveride methode
 	 * Beschreibung: Die Ausgabe aus der Console von Patienten mit ihren daten in dem krankenhaus
-	 * @return sb.toString(),
+	 * @return sb.toString(),die Ausgabe auf der Console
 	 */
 	@Override
 	public String toString() {
@@ -238,8 +235,8 @@ public class Patient implements Serializable {
 	}
 
 	/**
-	 *
-	 * @return
+	 *Die Methode erzeugt neue patienten und gibt die zureck
+	 * @return p , Patient
 	 */
 	public static Patient neuAnlegen() {
 		System.out.println(" ======== ANLEGEN EINES NEUEN PATIENTEN ======== ");
@@ -270,8 +267,9 @@ public class Patient implements Serializable {
 
 	/**
 	 *
-	 * @param sc
-	 * @return
+	 * @param sc Scanner
+	 * @return anrede , anrede
+	 * @throws Exception(), pruft dass die eingabe die antwort 1 oder 2 entaelt
 	 */
 	private static Anrede liesAnredeEin(Scanner sc) {
 		System.out.println("(0) - Herr oder (1) - Frau?");
@@ -299,9 +297,9 @@ public class Patient implements Serializable {
 	}
 
 	/**
-	 *
-	 * @param sc
-	 * @return
+	 *liest die eingabe von dem Datum in bestimmterreinfolge dd.mm.yyyy
+	 * @param sc scanner
+	 * @return date, Datum
 	 */
 	private static Date liesGebDatumEin(Scanner sc) {
 		System.out.println("Geburtsdatum (dd.mm.yyyy):");
