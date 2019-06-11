@@ -1,3 +1,3 @@
 # Prog II
 
-Aufgabe 4 - Krankenhaus – Export & Import
+Aufgabe 5 - Krankenhaus – Design-Pattern
