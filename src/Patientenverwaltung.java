@@ -1,6 +1,10 @@
 import data.*;
 import persistence.CSVPersistenceManager;
 import persistence.SerializablePersistenceManager;
+import utils.ConsoleLogger;
+import utils.FileLogger;
+import utils.ILoggerStrategy;
+import utils.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -16,6 +20,10 @@ public class Patientenverwaltung {
     public static final String PLACEHOLDER = ".*";
 
     private Krankenhaus kh;
+
+    public Patientenverwaltung() {
+        this.kh = SerializablePersistenceManager.importData("krankenhaus-export.ser");
+    }
 
     /**
      * create dummy data
@@ -91,7 +99,7 @@ public class Patientenverwaltung {
 
         while (auswahl != 0) {
             showMenu();
-            auswahl = liesEingabe(sc, 0, 12);
+            auswahl = liesEingabe(sc, 0, 15);
 
             if (pv.kh == null && auswahl != 11) {
                 System.out.println("Krankenhaus nicht definiert --> Importieren Sie zuerst eine Datei.");
@@ -208,6 +216,23 @@ public class Patientenverwaltung {
                         System.out.println(n + " Datensätze in die Datei \"" + path + "\" exportiert.");
                     }
                     break;
+                case 13:
+                    break;
+                case 14:
+                    Logger.getInstance().log("Du hast 14 ausgewählt");
+                    break;
+                case 15:
+                    System.out.println("Wählen Sie eine Protokoll-Strategy aus: ");
+                    System.out.println("(0) File-Logger, (1) Konsole-Logger ");
+                    int strategyTyp = liesEingabe(sc, 0, 1);
+                    if (strategyTyp == 0) {
+                        Logger.getInstance().setLoggerStrategy(new FileLogger());
+                    }
+                    else {
+                        Logger.getInstance().setLoggerStrategy(new ConsoleLogger());
+                    }
+
+                    break;
                 default: {
                     // kann nicht auftreten, weil fehlerhafte eingabe wird vorher abgefangen
                 }
@@ -234,6 +259,9 @@ public class Patientenverwaltung {
         System.out.println("| (10) Daten Export                                                        |");
         System.out.println("| (11) Daten Import                                                        |");
         System.out.println("| (12) Patienten nach Namen sortiert als CSV-Datei exportieren             |");
+        System.out.println("| (13) Patient aufnehmen                                                   |");
+        System.out.println("| (14) Patient entlassen                                                   |");
+        System.out.println("| (15) Protokoll-Strategie wählen                                          |");
         System.out.println("|                                                                          |");
         System.out.println("| (00) Beenden                                                             |");
         System.out.println("+--------------------------------------------------------------------------+");
