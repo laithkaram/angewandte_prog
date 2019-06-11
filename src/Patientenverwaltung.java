@@ -1,6 +1,7 @@
 import data.*;
 import persistence.CSVPersistenceManager;
 import persistence.SerializablePersistenceManager;
+import utils.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -11,11 +12,25 @@ import java.util.stream.Collectors;
  * @version 1.8
  */
 
-public class Patientenverwaltung {
+public class Patientenverwaltung extends Observable {
 
     public static final String PLACEHOLDER = ".*";
 
     private Krankenhaus kh;
+    private Qualitaetsmanagementstelle qualiStelle;
+    private Abrechnungsstelle abrechnungsStelle;
+
+    private HashMap<String, ArrayList<Aufenthalt>> aufenthalte;
+
+    public Patientenverwaltung() {
+        this.kh = SerializablePersistenceManager.importData("krankenhaus-export.ser");
+        aufenthalte = new HashMap<>();
+
+        qualiStelle = new Qualitaetsmanagementstelle();
+        abrechnungsStelle = new Abrechnungsstelle();
+        this.addObserver(qualiStelle);
+        this.addObserver(abrechnungsStelle);
+    }
 
     /**
      * create dummy data
@@ -85,13 +100,13 @@ public class Patientenverwaltung {
         Scanner sc = new Scanner(System.in);
 
         Patientenverwaltung pv = new Patientenverwaltung();
-       // pv.loadDumb();
+        // pv.loadDumb();
 
         int auswahl = -1;
 
         while (auswahl != 0) {
             showMenu();
-            auswahl = liesEingabe(sc, 0, 12);
+            auswahl = liesEingabe(sc, 0, 15);
 
             if (pv.kh == null && auswahl != 11) {
                 System.out.println("Krankenhaus nicht definiert --> Importieren Sie zuerst eine Datei.");
@@ -153,14 +168,14 @@ public class Patientenverwaltung {
                 case 7:
                 case 8: {
                     List<Patient> sortedList = pv.kh.getPatienten().stream()
-                                .sorted(Comparator.comparing((auswahl == 7) ? Patient::getPatientennummer : Patient::getNachnameInLowerCase))
-                                .collect(Collectors.toList());
+                            .sorted(Comparator.comparing((auswahl == 7) ? Patient::getPatientennummer : Patient::getNachnameInLowerCase))
+                            .collect(Collectors.toList());
 
 
                     System.out.println("Es wurden " + sortedList.size() + " Patienten gefunden.");
                     System.out.println("|Patientennummer|Anrede|Vorname        |Nachname       |");
                     System.out.println("+---------------+------+---------------+---------------+");
-                    for (Patient p: sortedList) {
+                    for (Patient p : sortedList) {
                         System.out.printf("|%-15s|%-6s|%-15s|%-15s|\n", p.getPatientennummer(), p.getAnrede(), p.getName(), p.getNachname());
                     }
                     break;
@@ -170,7 +185,7 @@ public class Patientenverwaltung {
                     System.out.println("Es wurden " + liste.size() + " Krankenversicherungen gefunden.");
                     System.out.println("|Versichertennummer  |Versicherung                            |");
                     System.out.println("+--------------------+----------------------------------------+");
-                    for (Krankenversicherung k: liste) {
+                    for (Krankenversicherung k : liste) {
                         System.out.printf("|%-20s|%-40s|\n", k.getKrankenversichertennummer(), k.getName());
                     }
                     break;
@@ -208,6 +223,58 @@ public class Patientenverwaltung {
                         System.out.println(n + " Datensätze in die Datei \"" + path + "\" exportiert.");
                     }
                     break;
+                case 13: {
+                    System.out.println("Welcher Patient soll eingecheckt werden? Geben Sie die Patientennummer ein: ");
+                    Patient p = pv.searchPatient(sc, false);
+                    System.out.println("Wann soll der Patient eingecheckt werden? Geben Sie ein Datum ein: (Format: dd.mm.yyyy HH:mm)");
+                    Date d = ScannerUtils.liesDatumEin(sc, "dd.MM.yyyy HH:mm");
+
+                    if (!pv.aufenthalte.containsKey(p.getPatientennummer())) {
+                        pv.aufenthalte.put(p.getPatientennummer(), new ArrayList<>());
+                    }
+                    Aufenthalt a = new Aufenthalt(p);
+                    a.checkIn(d);
+                    pv.aufenthalte.get(p.getPatientennummer()).add(a);
+                    System.out.println("Patient ist eingecheckt am " + a.getFrom().toString());
+                    break;
+                }
+                case 14:
+                    System.out.println("Welcher Patient soll ausgecheckt werden? Geben Sie die Patientennummer ein: ");
+                    Patient p = pv.searchPatient(sc, false);
+                    System.out.println("Wann soll der Patient ausgecheckt werden? Geben Sie ein Datum ein: (Format: dd.mm.yyyy HH:mm)");
+                    Date d = ScannerUtils.liesDatumEin(sc, "dd.MM.yyyy HH:mm");
+
+                    if (!pv.aufenthalte.containsKey(p.getPatientennummer()) ||
+                            pv.aufenthalte.get(p.getPatientennummer()).isEmpty() ||
+                            !pv.aufenthalte.get(p.getPatientennummer()).get(pv.aufenthalte.get(p.getPatientennummer()).size() - 1).canCheckOut()) {
+
+                        System.out.println("Patient ist nicht eingescheckt. Kann also nicht ausgecheckt werden.");
+                    }
+                    else {
+                        Aufenthalt a = pv.aufenthalte.get(p.getPatientennummer()).get(pv.aufenthalte.get(p.getPatientennummer()).size() - 1);
+                        a.checkOut(d);
+
+                        if (a.getDays() > 2) {
+                            pv.qualiStelle.addAufenthalt(a);
+                            pv.abrechnungsStelle.addAufenthalt(a);
+                            pv.setChanged();
+                            pv.notifyObservers(a);
+                        }
+
+                        System.out.println("Patient ist ausgecheckt am " + a.getTo().toString());
+                    }
+                    break;
+                case 15:
+                    System.out.println("Wählen Sie eine Protokoll-Strategy aus: ");
+                    System.out.println("(0) File-Logger, (1) Konsole-Logger ");
+                    int strategyTyp = liesEingabe(sc, 0, 1);
+                    if (strategyTyp == 0) {
+                        Logger.getInstance().setLoggerStrategy(new FileLogger());
+                    } else {
+                        Logger.getInstance().setLoggerStrategy(new ConsoleLogger());
+                    }
+
+                    break;
                 default: {
                     // kann nicht auftreten, weil fehlerhafte eingabe wird vorher abgefangen
                 }
@@ -234,6 +301,9 @@ public class Patientenverwaltung {
         System.out.println("| (10) Daten Export                                                        |");
         System.out.println("| (11) Daten Import                                                        |");
         System.out.println("| (12) Patienten nach Namen sortiert als CSV-Datei exportieren             |");
+        System.out.println("| (13) Patient aufnehmen                                                   |");
+        System.out.println("| (14) Patient entlassen                                                   |");
+        System.out.println("| (15) Protokoll-Strategie wählen                                          |");
         System.out.println("|                                                                          |");
         System.out.println("| (00) Beenden                                                             |");
         System.out.println("+--------------------------------------------------------------------------+");
@@ -242,12 +312,12 @@ public class Patientenverwaltung {
     /**
      * Liesst die Eingabe des Benutzers von der Koncole und verifiziert, dass die Eingabe
      * zwischen 'min'(eingedschlossen) und 'max'(eingeschlossen) liegt.
-     *
+     * <p>
      * also min <= x <= max
-     *
+     * <p>
      * Es wird solange wiederholt gefragt, bis die Eingabe korrekt ist.
      *
-     * @param sc scanner eingabe
+     * @param sc  scanner eingabe
      * @param min minimalwert
      * @param max maximalwert
      * @return eingabe , der eingegebene wert
@@ -272,8 +342,7 @@ public class Patientenverwaltung {
     }
 
     /**
-     *
-     * @param sc scanner
+     * @param sc     scanner
      * @param byName name
      * @return foundPatients.get(0) , die gefundene patienten
      */
@@ -313,6 +382,7 @@ public class Patientenverwaltung {
 
     /**
      * Sucht die krankenversicherung und gibt die zureck un prueft ob die id numer mit der krankenversichrungen gefgunden wird
+     *
      * @param sc Scanner
      * @return krankenversicherungen.get(0) krankenversicherung
      */
@@ -321,8 +391,8 @@ public class Patientenverwaltung {
 
         ArrayList<Krankenversicherung> krankenversicherungen = new ArrayList<>();
 
-        for(Patient p: this.kh.getPatienten()) {
-            for(Krankenversicherung k: p.getKrankenversicherung()) {
+        for (Patient p : this.kh.getPatienten()) {
+            for (Krankenversicherung k : p.getKrankenversicherung()) {
                 if (k.getKrankenversichertennummer().toLowerCase().matches(PLACEHOLDER + versicherungsId + PLACEHOLDER)) {
                     krankenversicherungen.add(k);
                 }
@@ -346,7 +416,8 @@ public class Patientenverwaltung {
     }
 
     /**
-     *Ausgabe der Patienten
+     * Ausgabe der Patienten
+     *
      * @param p Patient
      */
     private void gibPatientAus(Patient p) {
@@ -363,7 +434,7 @@ public class Patientenverwaltung {
         sb.append(String.format(tabellenPattern, "Name", p.getName()));
         sb.append(String.format(tabellenPattern, "Nachname", p.getNachname()));
         sb.append(String.format(tabellenPattern, "Adresse", p.getAdresse()));
-        sb.append(String.format(tabellenPattern, "Geburtsdatum",  new SimpleDateFormat("dd.MM.yyyy, EEEE", Locale.GERMAN).format(p.getGeburtsdatum())));
+        sb.append(String.format(tabellenPattern, "Geburtsdatum", new SimpleDateFormat("dd.MM.yyyy, EEEE", Locale.GERMAN).format(p.getGeburtsdatum())));
         sb.append(String.format(tabellenPattern, "Telefonnummer", p.getTelefonnummer()));
         sb.append(String.format(tabellenPattern, "Email", p.getEmailadresse()));
         if (p.getKrankenversicherung().isEmpty()) {
@@ -381,7 +452,8 @@ public class Patientenverwaltung {
     }
 
     /**
-     *gibt die krankenversicherung raus
+     * gibt die krankenversicherung raus
+     *
      * @param kv Krankenbersicherung
      */
     private void gibVersicherungAus(Krankenversicherung kv) {
@@ -397,8 +469,7 @@ public class Patientenverwaltung {
             System.out.printf(tabellenPattern, "Nummer", kv.getKrankenversichertennummer());
             System.out.printf(tabellenPattern, "Name", kv.getName());
             System.out.printf("%-20s : %-30.2fs\n", "Deckungslimit", ((Privatversicherung) kv).getDeckungslimit());
-        }
-        else if (kv instanceof GesetzlicheVersicherung) {
+        } else if (kv instanceof GesetzlicheVersicherung) {
             System.out.printf(tabellenPattern, "Typ", "Gesetzliche Versicherung");
             System.out.printf(tabellenPattern, "Nummer", kv.getKrankenversichertennummer());
             System.out.printf(tabellenPattern, "Name", kv.getName());
