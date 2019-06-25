@@ -5,7 +5,7 @@ import persistence.SerializablePersistenceManager;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.oracle.tools.packager.jnlp.JNLPBundler.PLACEHOLDER;
+import static utils.ScannerUtils.PLACEHOLDER;
 import static utils.ScannerUtils.liesEingabe;
 
 /**

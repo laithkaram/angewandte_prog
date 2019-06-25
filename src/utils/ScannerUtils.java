@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 public class ScannerUtils {
 
+    public static final String PLACEHOLDER = ".*";
+
     /**
      * Liesst die Eingabe des Benutzers von der Koncole und verifiziert, dass die Eingabe
      * zwischen 'min'(eingedschlossen) und 'max'(eingeschlossen) liegt.

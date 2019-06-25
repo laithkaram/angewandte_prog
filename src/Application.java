@@ -14,8 +14,6 @@ import static utils.ScannerUtils.liesEingabe;
 
 public class Application {
 
-    public static final String PLACEHOLDER = ".*";
-
     /**
      * Hauptprogramm.
      *
