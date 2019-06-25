@@ -1,3 +1,3 @@
 # Prog II
 
-Aufgabe 5 - Krankenhaus – Design-Pattern
+Aufgabe 6 - Krankenhaus – GUI und Swing
