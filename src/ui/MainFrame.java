@@ -16,7 +16,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 public class MainFrame extends JFrame implements ActionListener {
 
@@ -52,6 +51,9 @@ public class MainFrame extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
+    /**
+     * inizialisiert menu
+     */
     private void initMenuBar() {
         JMenuBar menu = new JMenuBar();
 
@@ -140,16 +142,22 @@ public class MainFrame extends JFrame implements ActionListener {
         patientenJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         patientenJList.setVisibleRowCount(-1);
 
+        /*
+         * on select patient in the list
+         */
         patientenJList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
                     selectedPatient = patientenJList.getSelectedValue();
-                    updateAufenthalte();
+                    updateDetailPanel();
                 }
             }
         });
 
+        /*
+        wie ein patient in der liste angezeigt werden soll..
+         */
         patientenJList.setCellRenderer(new ListCellRenderer<Patient>() {
             @Override
             public Component getListCellRendererComponent(JList<? extends Patient> list, Patient value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -176,6 +184,10 @@ public class MainFrame extends JFrame implements ActionListener {
         return panel;
     }
 
+    /**
+     * in deiser mehtode wird das detail panel erstellt ..
+     * @return jpanel mit der datei ansicht zu einem patienten mit seinem aufenthalten ,
+     */
     private JPanel initDetailPanel() {
         JPanel panel = new JPanel();
         panel.setLocation(8, 8);
@@ -282,11 +294,18 @@ public class MainFrame extends JFrame implements ActionListener {
         return panel;
     }
 
+    /**
+     * mit dieser methode wird die patienten liste aktualisiert
+     */
     private void updatePatientenList() {
         this.patientenData.setPatientenNamen(this.pv.kh.getPatienten());
+        this.patientenJList.updateUI();
     }
 
-    private void updateAufenthalte() {
+    /**
+     * hier wird das detail panel mit den daten des derzeit ausgewählten patienten ausgefüllt.
+     */
+    private void updateDetailPanel() {
         if (selectedPatient == null) {
             return;
         }
@@ -335,6 +354,10 @@ public class MainFrame extends JFrame implements ActionListener {
         gbc.weighty = weighty;
     }
 
+    /**
+     * action lisner des mainFrames.
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
@@ -363,7 +386,7 @@ public class MainFrame extends JFrame implements ActionListener {
                     Aufenthalt a = new Aufenthalt(selectedPatient);
                     a.checkIn(d);
                     this.pv.aufenthalte.get(selectedPatient.getPatientennummer()).add(a);
-                    updateAufenthalte();
+                    updateDetailPanel();
                 } catch (ParseException pe) {
                     JOptionPane.showMessageDialog(this,
                             "Datum konnte nicht interpretiert werden.\nVersuche das Datum in folgendem Format einzugeben: dd.MM.yyyy",
@@ -377,7 +400,7 @@ public class MainFrame extends JFrame implements ActionListener {
                     Date d = dateFormatter.parse(this.entlassenTextField.getText());
                     Aufenthalt a = pv.aufenthalte.get(selectedPatient.getPatientennummer()).get(pv.aufenthalte.get(selectedPatient.getPatientennummer()).size() - 1);
                     a.checkOut(d);
-                    updateAufenthalte();
+                    updateDetailPanel();
                 } catch (ParseException pe) {
                     JOptionPane.showMessageDialog(this,
                             "Datum konnte nicht interpretiert werden.\nVersuche das Datum in folgendem Format einzugeben: dd.MM.yyyy",
