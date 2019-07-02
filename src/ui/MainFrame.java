@@ -5,6 +5,8 @@ import data.Patient;
 import ui.listmodels.AufenthaltData;
 import ui.listmodels.PatientenData;
 import data.Patientenverwaltung;
+import utils.FileLogger;
+import utils.Logger;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -16,6 +18,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.TimerTask;
 
 public class MainFrame extends JFrame implements ActionListener {
 
@@ -23,6 +27,9 @@ public class MainFrame extends JFrame implements ActionListener {
     Patientenverwaltung pv;
     JList<Patient> patientenJList;
     PatientenData patientenData;
+
+    JMenuItem monitoringStarten;
+    JMenuItem monitoringStoppen;
 
     Patient selectedPatient;
     JList<Aufenthalt> aufenthaltJList;
@@ -33,6 +40,8 @@ public class MainFrame extends JFrame implements ActionListener {
     JTextField entlassenTextField;
     JButton aufnehmenButton;
     JButton entlassenButton;
+
+    java.util.Timer timer;
 
     public MainFrame() throws HeadlessException {
         super("Patientenverwaltung");
@@ -79,6 +88,20 @@ public class MainFrame extends JFrame implements ActionListener {
         patientenMenu.add(close);
 
         menu.add(patientenMenu);
+
+        JMenu monitoring = new JMenu("Monitoring");
+        monitoringStarten = new JMenuItem("Starten");
+        monitoringStarten.setActionCommand("monitoringStarten");
+        monitoringStarten.addActionListener(this);
+        monitoringStoppen = new JMenuItem("Stoppen");
+        monitoringStoppen.setActionCommand("monitoringStoppen");
+        monitoringStoppen.addActionListener(this);
+        monitoringStoppen.setEnabled(false);
+
+        monitoring.add(monitoringStarten);
+        monitoring.add(monitoringStoppen);
+
+        menu.add(monitoring);
 
         // Versicherungen
         JMenu versicherungen = new JMenu("Versicherungen");
@@ -406,6 +429,40 @@ public class MainFrame extends JFrame implements ActionListener {
                             "Datum konnte nicht interpretiert werden.\nVersuche das Datum in folgendem Format einzugeben: dd.MM.yyyy",
                             "Fehler",
                             JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            }
+            case "monitoringStarten": {
+                monitoringStarten.setEnabled(false);
+                monitoringStoppen.setEnabled(true);
+                Logger.getInstance().setLoggerStrategy(new FileLogger("aufenthalte-log"));
+                timer = new java.util.Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        synchronized (pv) {
+                            int allAufenthalte = 0;
+                            int currentAufenthalte = 0;
+
+                            for(ArrayList<Aufenthalt> aufenthalts: pv.aufenthalte.values()) {
+                                allAufenthalte += aufenthalts.size();
+                                if (aufenthalts.size() > 0 && aufenthalts.get(aufenthalts.size() - 1).canCheckOut()) {
+                                    currentAufenthalte++;
+                                }
+                            }
+                            Logger.getInstance().log("Das Krankenhaus hat gerade "+ currentAufenthalte + " Aufenthalte " +
+                                    "von insgesamt " + allAufenthalte + " Aufenthalten.");
+                        }
+                    }
+                },0 , 5_000);
+                break;
+            }
+            case "monitoringStoppen": {
+                monitoringStarten.setEnabled(true);
+                monitoringStoppen.setEnabled(false);
+                if (timer != null) {
+                    timer.cancel();
+                    timer = null;
                 }
                 break;
             }

@@ -6,7 +6,7 @@ import java.io.Serializable;
  *
  */
 public abstract class Krankenversicherung implements Serializable {
-	private static int ID_COUNTER = 10000;
+	private static int ID_COUNTER = 10_020;
 
 	private String name;
 	private String krankenversichertennummer;

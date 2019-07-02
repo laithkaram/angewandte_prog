@@ -14,6 +14,7 @@ import static utils.ScannerUtils.liesEingabe;
 
 public class Application {
 
+
     /**
      * Hauptprogramm.
      *
@@ -59,11 +60,13 @@ public class Application {
 
     private static void cliLoop(Scanner sc) {
         Patientenverwaltung pv = new Patientenverwaltung();
+        Timer timer = null;
+
         int auswahl = -1;
 
         while (auswahl != 0) {
             showMenu();
-            auswahl = liesEingabe(sc, 0, 15);
+            auswahl = liesEingabe(sc, 0, 17);
 
             if (pv.kh == null && auswahl != 11) {
                 System.out.println("Krankenhaus nicht definiert --> Importieren Sie zuerst eine Datei.");
@@ -183,6 +186,9 @@ public class Application {
                 case 13: {
                     System.out.println("Welcher Patient soll eingecheckt werden? Geben Sie die Patientennummer ein: ");
                     Patient p = pv.searchPatient(sc, false);
+                    if (p == null) {
+                        continue;
+                    }
                     System.out.println("Wann soll der Patient eingecheckt werden? Geben Sie ein Datum ein: (Format: dd.mm.yyyy HH:mm)");
                     Date d = ScannerUtils.liesDatumEin(sc, "dd.MM.yyyy HH:mm");
 
@@ -230,6 +236,41 @@ public class Application {
                     }
 
                     break;
+                case 16:
+                    Logger.getInstance().setLoggerStrategy(new FileLogger("aufenthalte-cli-log"));
+                    if (timer != null) {
+                        System.out.println("Monitoring bereits gestartet.");
+                        continue;
+                    }
+                    timer = new Timer();
+                    timer.scheduleAtFixedRate(new TimerTask() {
+                        @Override
+                        public void run() {
+                            synchronized (pv) {
+                                int allAufenthalte = 0;
+                                int currentAufenthalte = 0;
+
+                                for(ArrayList<Aufenthalt> aufenthalts: pv.aufenthalte.values()) {
+                                    allAufenthalte += aufenthalts.size();
+                                    if (aufenthalts.size() > 0 && aufenthalts.get(aufenthalts.size() - 1).canCheckOut()) {
+                                        currentAufenthalte++;
+                                    }
+                                }
+                                Logger.getInstance().log("Das Krankenhaus hat gerade "+ currentAufenthalte + " Aufenthalte " +
+                                        "von insgesamt " + allAufenthalte + " Aufenthalten.");
+                            }
+                        }
+                    },0 , 30_000);
+                    break;
+                case 17:
+                    if (timer != null) {
+                        timer.cancel();
+                        timer = null;
+                    }
+                    else {
+                        System.out.println("Kein Monitoring vorhanden, welches gestoppt werden soll.");
+                    }
+                    break;
                 default: {
                     // kann nicht auftreten, weil fehlerhafte eingabe wird vorher abgefangen
                 }
@@ -259,6 +300,8 @@ public class Application {
         System.out.println("| (13) Patient aufnehmen                                                   |");
         System.out.println("| (14) Patient entlassen                                                   |");
         System.out.println("| (15) Protokoll-Strategie wählen                                          |");
+        System.out.println("| (16) Monitoring starten                                                  |");
+        System.out.println("| (17) Monitoring beenden                                                  |");
         System.out.println("|                                                                          |");
         System.out.println("| (00) Beenden                                                             |");
         System.out.println("+--------------------------------------------------------------------------+");
