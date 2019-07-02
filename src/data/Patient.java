@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Patient implements Serializable {
 
-	private static int COUNTER_ID = 20_000;
+	private static int COUNTER_ID = 20_010;
 
 	private final String patientennummer;
 	private Anrede anrede;
