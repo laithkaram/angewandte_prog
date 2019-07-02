@@ -47,6 +47,7 @@ public class MainFrame extends JFrame implements ActionListener {
         super("Patientenverwaltung");
 
         pv = new Patientenverwaltung();
+        pv.loadSerializable();
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	//	Klick	auf	x
 

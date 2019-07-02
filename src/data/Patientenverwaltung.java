@@ -1,6 +1,8 @@
 package data;
 
+import persistence.CSVPersistenceManager;
 import persistence.SerializablePersistenceManager;
+import utils.FileManager;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -22,7 +24,12 @@ public class Patientenverwaltung extends Observable {
     public HashMap<String, ArrayList<Aufenthalt>> aufenthalte;
 
     public Patientenverwaltung() {
-        this.kh = SerializablePersistenceManager.importData("krankenhaus-export.ser");
+        try {
+            this.kh = new Krankenhaus("Krankenhaus 1", "UST_IDNR",
+                    new Adresse("Müllerweg 1", "", 12345, "Berlin"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         aufenthalte = new HashMap<>();
 
         qualiStelle = new Qualitaetsmanagementstelle();
@@ -31,6 +38,16 @@ public class Patientenverwaltung extends Observable {
         this.addObserver(abrechnungsStelle);
     }
 
+    public void loadSerializable() {
+        this.kh = SerializablePersistenceManager.importData("krankenhaus-export.ser");
+    }
+
+    public void importCSV(String filename) {
+        List<Patient> patientenListe = CSVPersistenceManager.importPatientsCSV(filename);
+        for(Patient p: patientenListe) {
+           this.kh.addPatient(p);
+        }
+    }
 
     /**
      * create dummy data
@@ -231,4 +248,5 @@ public class Patientenverwaltung extends Observable {
         this.setChanged();
         this.notifyObservers(arg);
     }
+
 }
