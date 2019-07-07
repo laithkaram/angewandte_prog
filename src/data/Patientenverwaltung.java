@@ -1,6 +1,8 @@
 package data;
 
+import persistence.CSVPersistenceManager;
 import persistence.SerializablePersistenceManager;
+import utils.FileManager;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -15,6 +17,7 @@ import static utils.ScannerUtils.liesEingabe;
 
 public class Patientenverwaltung extends Observable {
 
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
     public Krankenhaus kh;
     public Qualitaetsmanagementstelle qualiStelle;
     public Abrechnungsstelle abrechnungsStelle;
@@ -22,7 +25,12 @@ public class Patientenverwaltung extends Observable {
     public HashMap<String, ArrayList<Aufenthalt>> aufenthalte;
 
     public Patientenverwaltung() {
-        this.kh = SerializablePersistenceManager.importData("krankenhaus-export.ser");
+        try {
+            this.kh = new Krankenhaus("Krankenhaus 1", "UST_IDNR",
+                    new Adresse("Müllerweg 1", "", 12345, "Berlin"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         aufenthalte = new HashMap<>();
 
         qualiStelle = new Qualitaetsmanagementstelle();
@@ -31,6 +39,16 @@ public class Patientenverwaltung extends Observable {
         this.addObserver(abrechnungsStelle);
     }
 
+    public void loadSerializable() {
+        this.kh = SerializablePersistenceManager.importData("krankenhaus-export.ser");
+    }
+
+    public void importCSV(String filename) {
+        List<Patient> patientenListe = CSVPersistenceManager.importPatientsCSV(filename);
+        for(Patient p: patientenListe) {
+           this.kh.addPatient(p);
+        }
+    }
 
     /**
      * create dummy data
@@ -230,5 +248,24 @@ public class Patientenverwaltung extends Observable {
     public void notifyObserver(Object arg) {
         this.setChanged();
         this.notifyObservers(arg);
+    }
+
+    public void patientAufnehmen(Patient p, Date date) {
+        ArrayList<Aufenthalt> aufenthalts = this.aufenthalte.get(p.getPatientennummer());
+        if ( aufenthalts != null && aufenthalts.size() > 0 && aufenthalts.get(aufenthalts.size() - 1).canCheckOut()) {
+            System.out.println("Patient bereits eingecheckt.");
+            return;
+        }
+        if ( aufenthalts == null) {
+            this.aufenthalte.put(p.getPatientennummer(), new ArrayList<>());
+        }
+        Aufenthalt a = new Aufenthalt(p);
+        a.checkIn(date);
+        this.aufenthalte.get(p.getPatientennummer()).add(a);
+    }
+
+    public void patientAuschecken(Patient p, Date date) {
+        Aufenthalt a = this.aufenthalte.get(p.getPatientennummer()).get(aufenthalte.get(p.getPatientennummer()).size() - 1);
+        a.checkOut(date);
     }
 }
