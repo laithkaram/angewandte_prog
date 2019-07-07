@@ -7,6 +7,8 @@ import utils.FileManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,4 +48,41 @@ class PatientenverwaltungTest {
         assertTrue(f.exists());
     }
 
+    @Test
+    public void testAnlegenEinerGesetzlichenVersicherung() {
+        this.pv.loadSerializable();
+
+        Patient p = this.pv.kh.getPatienten().get(0);
+        GesetzlicheVersicherung newVersicherung = new GesetzlicheVersicherung("KV Name", true);
+
+        assertFalse(p.getKrankenversicherung().contains(newVersicherung));
+        p.getKrankenversicherung().add(newVersicherung);
+        assertTrue(p.getKrankenversicherung().contains(newVersicherung));
+    }
+
+    @Test
+    public void testPatientEinchecken() {
+        this.pv.loadSerializable();
+        Patient p = this.pv.kh.getPatienten().get(0);
+
+        ArrayList<Aufenthalt> aufenthalts = this.pv.aufenthalte.get(p.getPatientennummer());
+        assertTrue(aufenthalts == null || !aufenthalts.get(aufenthalts.size() - 1).canCheckOut());
+        this.pv.patientAufnehmen(p, new Date());
+
+        aufenthalts = this.pv.aufenthalte.get(p.getPatientennummer());
+        assertTrue(aufenthalts.get(aufenthalts.size() - 1).canCheckOut());
+    }
+
+    @Test
+    public void testPatientAuschecken() {
+        this.testPatientEinchecken();
+
+        Patient p = this.pv.kh.getPatienten().get(0);
+        ArrayList<Aufenthalt> aufenthalts = this.pv.aufenthalte.get(p.getPatientennummer());
+        assertTrue(aufenthalts.get(aufenthalts.size() - 1).canCheckOut());
+        this.pv.patientAuschecken(p, new Date());
+
+        aufenthalts = this.pv.aufenthalte.get(p.getPatientennummer());
+        assertTrue(!aufenthalts.get(aufenthalts.size() - 1).canCheckOut());
+    }
 }

@@ -17,6 +17,7 @@ import static utils.ScannerUtils.liesEingabe;
 
 public class Patientenverwaltung extends Observable {
 
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
     public Krankenhaus kh;
     public Qualitaetsmanagementstelle qualiStelle;
     public Abrechnungsstelle abrechnungsStelle;
@@ -249,4 +250,22 @@ public class Patientenverwaltung extends Observable {
         this.notifyObservers(arg);
     }
 
+    public void patientAufnehmen(Patient p, Date date) {
+        ArrayList<Aufenthalt> aufenthalts = this.aufenthalte.get(p.getPatientennummer());
+        if ( aufenthalts != null && aufenthalts.size() > 0 && aufenthalts.get(aufenthalts.size() - 1).canCheckOut()) {
+            System.out.println("Patient bereits eingecheckt.");
+            return;
+        }
+        if ( aufenthalts == null) {
+            this.aufenthalte.put(p.getPatientennummer(), new ArrayList<>());
+        }
+        Aufenthalt a = new Aufenthalt(p);
+        a.checkIn(date);
+        this.aufenthalte.get(p.getPatientennummer()).add(a);
+    }
+
+    public void patientAuschecken(Patient p, Date date) {
+        Aufenthalt a = this.aufenthalte.get(p.getPatientennummer()).get(aufenthalte.get(p.getPatientennummer()).size() - 1);
+        a.checkOut(date);
+    }
 }

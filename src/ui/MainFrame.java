@@ -407,9 +407,7 @@ public class MainFrame extends JFrame implements ActionListener {
             case "aufnehmen": {
                 try {
                     Date d = dateFormatter.parse(this.aufnahmeTextField.getText());
-                    Aufenthalt a = new Aufenthalt(selectedPatient);
-                    a.checkIn(d);
-                    this.pv.aufenthalte.get(selectedPatient.getPatientennummer()).add(a);
+                    this.pv.patientAufnehmen(selectedPatient, d);
                     updateDetailPanel();
                 } catch (ParseException pe) {
                     JOptionPane.showMessageDialog(this,
@@ -422,8 +420,7 @@ public class MainFrame extends JFrame implements ActionListener {
             case "entlassen": {
                 try {
                     Date d = dateFormatter.parse(this.entlassenTextField.getText());
-                    Aufenthalt a = pv.aufenthalte.get(selectedPatient.getPatientennummer()).get(pv.aufenthalte.get(selectedPatient.getPatientennummer()).size() - 1);
-                    a.checkOut(d);
+                    this.pv.patientAuschecken(selectedPatient, d);
                     updateDetailPanel();
                 } catch (ParseException pe) {
                     JOptionPane.showMessageDialog(this,
